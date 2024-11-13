@@ -63,7 +63,10 @@
             <h:commandButton value="Отправить" styleClass="btn">
                 <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
             </h:commandButton>
-            <h:commandButton value="Вернуться" id="toStartButton" action="toIndex"/>
+            <h:commandButton value="Вернуться" styleClass="btn" id="toStartButton" action="toIndex"/>
+            <h:commandButton value="Очистить таблицу" styleClass="btn" id="clearButton" action="toIndex">
+            <f:ajax execute="@form" listener="#{tableResBean.clearTable()}" render="@form tries"/>
+            </h:commandButton>
 
         </h:panelGrid>
     </h:form>
