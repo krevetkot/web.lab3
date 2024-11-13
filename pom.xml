@@ -66,6 +66,13 @@
             <version>1.18.30</version>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.primefaces/primefaces -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>14.0.4</version>
+        </dependency>
+
 
 
     </dependencies>

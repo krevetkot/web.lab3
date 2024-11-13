@@ -15,11 +15,20 @@ public class DatabaseManager {
     private static final String PASSWORD = "7Tpx3iO5o2XLp7ja";
     private Connection connection;
 
+    private static volatile DatabaseManager instance;
+
     public void connect() throws SQLException {
         connection = DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public void createPointsTable(Connection connection) {
+    public static DatabaseManager getInstance(){
+        if (instance==null){
+            return new DatabaseManager();
+        }
+        return instance;
+    }
+
+    public void createPointsTable() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS points ("
                 + "ID SERIAL PRIMARY KEY, "
                 + "x REAL NOT NULL, "
@@ -68,4 +77,6 @@ public class DatabaseManager {
         }
         return points;
     }
+
+    //добавить очистку
 }

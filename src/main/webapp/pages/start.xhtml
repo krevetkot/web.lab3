@@ -6,18 +6,19 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 
-    <ui:composition template="/pages/templates/baseLayout.xhtml">
-        <ui:define name="content" id="content">
-            <h:outputStylesheet name="css/main.css" />
+<h:head>
+    <title>Веб лаб 3</title>
+    <h:outputScript type="text/css" src="../style/style.css"/>
+    <h:outputScript src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"/>
 
-            <h:form id="form" styleClass="buttons-container">
-                <canvas id="clock" width="390" height="390"></canvas>
-                <h:button id="start-button" class="btn confirm-colors material-icons"
-                          outcome="toMain" value="Go To Main"/>
-            </h:form>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</h:head>
 
-            <h:outputScript library="js" name="clock.js"/>
-        </ui:define>
-    </ui:composition>
+<h:body>
+    <h:panelGroup>
+        <h1>Слонимская Ксения Григорьевна, P3231, вариант 31812</h1>
+    </h:panelGroup>
+    <h:commandButton value="Вернуться" class="btn" action="toMain"/>
+</h:body>
 
 </html>

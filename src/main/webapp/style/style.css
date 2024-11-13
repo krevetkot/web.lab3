@@ -1,0 +1,74 @@
+h1 {
+    color: maroon;
+    font: 2rem "Fira Sans", sans-serif;
+    height: 20px;
+    text-align: center;
+}
+
+p {
+    font: 1.5rem "Garamond", sans-serif;
+}
+
+/*table {
+    width: 100%;
+    text-align: left;
+}*/
+
+
+td, th {
+/ / border: 3 px solid #245488;
+    padding: 10px 20px;
+    vertical-align: top;
+    width: 30%;
+}
+
+/*селектор идентификатора*/
+#tries {
+    width: 100%;
+    height: 100px;
+    table-layout: fixed;
+}
+
+#tries td{
+    align-content: center;
+}
+
+/*селектор элемента*/
+body {
+    background-image: url('bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+/*селектор атрибута*/
+
+
+
+#history {
+    width: 40%;
+}
+
+#tdWithArea {
+    width: 20%;
+}
+
+/*селектор потомков (i - потомок p)*/
+p i {
+    color: maroon;
+}
+
+#otherX, #labelWithOtherX{
+    visibility: hidden;
+}
+
+.btn{
+    display: block;
+    margin-top: 20px; /* Расстояние между заголовком и кнопкой */
+    padding: 10px 20px;
+    background-color: beige; /* Бежевый цвет фона кнопки */
+    border: maroon;
+    color: maroon; /* Красный цвет текста */
+    font-size: 16px;
+    cursor: pointer;
+}
