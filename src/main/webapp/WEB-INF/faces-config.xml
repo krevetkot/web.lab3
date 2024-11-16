@@ -8,6 +8,7 @@
         <navigation-case>
             <from-outcome>toMain</from-outcome>
             <to-view-id>/pages/main.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 
@@ -16,6 +17,7 @@
         <navigation-case>
             <from-outcome>toStart</from-outcome>
             <to-view-id>/pages/start.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 </faces-config>

@@ -41,7 +41,7 @@ public class DatabaseManager {
                 + "x REAL NOT NULL, "
                 + "y REAL NOT NULL,"
                 + "r REAL NOT NULL, "
-                + "result BOOLEAN NOT NULL"
+                + "isHit BOOLEAN NOT NULL"
                 + ");";
         try (Statement statement = connection.createStatement()) {
             statement.execute(createTableSQL);
@@ -53,7 +53,7 @@ public class DatabaseManager {
 
     public void insertPoint(Point point) {
         logger.info("Добавление точки...");
-        String insertSQL = "INSERT INTO points (x, y, r, result) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO points (x, y, r, isHit) VALUES (?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
             preparedStatement.setDouble(1, point.getX());
             preparedStatement.setDouble(2, point.getY());
@@ -67,9 +67,10 @@ public class DatabaseManager {
     }
 
     public ArrayList<Point> getPoints() {
+        //if exists
         logger.info("Получение таблицы результатов...");
-        ArrayList<Point> points = new ArrayList<Point>();
-        String query = "SELECT * FROM points ORDER BY id DESC";
+        ArrayList<Point> points = new ArrayList<>();
+        String query = "SELECT IF EXISTS * FROM points ORDER BY id DESC";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -78,9 +79,9 @@ public class DatabaseManager {
                 float x = resultSet.getFloat("x");
                 float y = resultSet.getFloat("y");
                 float r = resultSet.getFloat("r");
-                boolean result = resultSet.getBoolean("result");
+                boolean isHit = resultSet.getBoolean("isHit");
 
-                Point point = new Point(x, y, r, result);
+                Point point = new Point(x, y, r, isHit);
                 points.add(point);
             }
         } catch (SQLException e) {
@@ -91,8 +92,9 @@ public class DatabaseManager {
     }
 
     public void clearAll(){
+        //is exists
         logger.info("Удаление таблицы результатов...");
-        String query = "DELETE * FROM points";
+        String query = "DELETE IF EXISTS* FROM points";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(query);
             logger.info("Удаление таблицы результатов прошло успешно.");
