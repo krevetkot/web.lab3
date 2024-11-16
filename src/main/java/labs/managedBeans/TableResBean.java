@@ -22,23 +22,30 @@ public class TableResBean implements Serializable {
     private static final Logger logger = LogManager.getLogger(TableResBean.class);
     @PostConstruct
     public void init(){
-        dbManager  = DatabaseManager.getInstance();
-        try {
-            dbManager.connect();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        resultList = dbManager.getPoints();
-        if (resultList == null){
-            resultList = new ArrayList<>();
-        }
-        dbManager.createPointsTable();
+        logger.info("init() started");
+//        dbManager  = DatabaseManager.getInstance();
+//        try {
+//            dbManager.connect();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        resultList = dbManager.getPoints();
+//        if (resultList == null){
+//            resultList = new ArrayList<>();
+//        }
+        logger.info("init() successfully finished");
     }
 
     public void clearTable(){
         logger.info("clearTable() started");
-        dbManager.clearAll();
+//        dbManager.clearAll();
         logger.info("clearTable() successfully finished");
+    }
+
+    public void addPoint(float x, float y, float r){
+        logger.info("addPoint() started");
+//        dbManager.clearAll();
+        logger.info("addPoint() successfully finished");
     }
 
 }

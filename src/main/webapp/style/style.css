@@ -9,45 +9,49 @@ p {
     font: 1.5rem "Garamond", sans-serif;
 }
 
-/*table {
+.main-table {
     width: 100%;
-    text-align: left;
-}*/
+    text-align: center;
+    height: 100%;
+}
 
+.first-column, .second-column{
+    width: 100%;
+    text-align: center;
+    height: 100%;
+}
 
-td, th {
-/ / border: 3 px solid #245488;
+td, th{
+    /*border: thin solid black;*/
     padding: 10px 20px;
     vertical-align: top;
     width: 30%;
 }
 
 /*селектор идентификатора*/
+/*#tries {*/
+/*    height: 100px;*/
+/*    table-layout: fixed;*/
+/*}*/
+
 #tries {
-    width: 100%;
-    height: 100px;
     table-layout: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(245, 245, 220, 0.5);
+    color: black;
 }
 
 #tries td{
     align-content: center;
 }
 
-/*селектор элемента*/
 body {
     background-image: url('bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-
-/*селектор атрибута*/
-
-
-
-#history {
-    width: 40%;
-}
 
 #tdWithArea {
     width: 20%;
@@ -61,6 +65,7 @@ p i {
 #otherX, #labelWithOtherX{
     visibility: hidden;
 }
+/*это оставим для момента обработки координат по клику*/
 
 .btn{
     display: block;
@@ -71,8 +76,9 @@ p i {
     color: maroon; /* Красный цвет текста */
     font-size: 16px;
     cursor: pointer;
+    align-items: center;
 }
 
 #btnToMain{
-    align-content: center;
+    align-items: center;
 }

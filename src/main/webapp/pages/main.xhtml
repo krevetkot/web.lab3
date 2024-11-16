@@ -23,22 +23,20 @@
 </h:head>
 
 <h:body>
-    <h:form id="main" action="/weblab2/controller-servlet" method="get">
-        <h:panelGrid columns="3">
-            <h:panelGroup>
-                <h1>Слонимская Ксения Григорьевна, P3231, вариант 31812</h1>
-            </h:panelGroup>
+    <h:panelGrid columns="3" styleClass="main-table">
 
-            <h:outputLabel for="x" value="Выберите X (-3; 5)"/>
-            <h:inputText id="x" styleClass="coords-input" value="#{formBean.x}"
-                         required="true" maxlength="7"
-                         requiredMessage="Value X is required"
-                         validatorMessage="The value must be from -3 to 5">
-                <f:converter converterId="jakarta.faces.Double"/>
-                <f:validateDoubleRange minimum="-3" maximum="5"/>
-            </h:inputText>
+        <h:panelGrid columns="1" styleClass="first-column">
+            <h:form id="main">
+<!--                как-то надо сделать разделение на строчки, я ебала-->
+                <h:outputLabel for="x" value="Выберите X (-3; 5)"/>
+                <h:inputText id="x" styleClass="coords-input" value="#{formBean.x}"
+                             required="true" maxlength="7"
+                             requiredMessage="Value X is required"
+                             validatorMessage="The value must be from -3 to 5">
+                    <f:converter converterId="jakarta.faces.Float"/>
+                    <f:validateDoubleRange minimum="-3" maximum="5"/>
+                </h:inputText>
 
-            <h:panelGrid columns="1">
                 <h:outputText value="Выберите Y:"/>
                 <h:selectOneMenu id="yValue" value="#{formBean.y}">
                     <f:selectItem itemValue="-2" itemLabel="-2"/>
@@ -49,59 +47,38 @@
                     <f:selectItem itemValue="0.5" itemLabel="0.5"/>
                     <f:selectItem itemValue="1" itemLabel="1"/>
                 </h:selectOneMenu>
-            </h:panelGrid>
 
-            <h:outputText value="Выберите R:"/>
+                <h:outputText value="Выберите R:"/>
+                <h:inputText id="rValue" value="#{formBean.r}" readonly="true"/>
 
-            <!-- Поле для отображения значения слайдера -->
-            <h:inputText id="rValue" value="#{formBean.r}" readonly="true"/>
 
-<!--            &lt;!&ndash; Слайдер из PrimeFaces &ndash;&gt;-->
-<!--            <p:slider for="rValue" minValue="1" maxValue="3" step="0.5" style="width: 200px;">-->
-<!--                <p:ajax update="rValue" listener="drawArea(rValue)"/>-->
-<!--            </p:slider>-->
+                <h:commandButton value="Отправить" styleClass="btn">
+                    <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
+                </h:commandButton>
 
-            <h:commandButton value="Отправить" styleClass="btn">
-                <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
-            </h:commandButton>
-            <h:form>
                 <h:commandButton value="Вернуться" styleClass="btn" id="toStartButton" action="toStart" outcome="toStart"/>
+
+                <h:commandButton value="Очистить таблицу" styleClass="btn" id="clearButton" action="toIndex">
+                    <f:ajax execute="@form" listener="#{tableResBean.clearTable()}" render="@form tries"/>
+                </h:commandButton>
             </h:form>
-            <h:commandButton value="Очистить таблицу" styleClass="btn" id="clearButton" action="toIndex">
-            <f:ajax execute="@form" listener="#{tableResBean.clearTable()}" render="@form tries"/>
-            </h:commandButton>
-
         </h:panelGrid>
-    </h:form>
 
-<!--    <h:panelGroup>-->
-<!--        <canvas id="area" width="350" height="350" onclick="onClickFunction(event)"></canvas>-->
-<!--    </h:panelGroup>-->
-
-<!--    <h:outputText escape="false" value="-->
-<!--    <canvas id='area' width='350' height='350' onclick='onClickFunction(event)'></canvas>"/>-->
+        <h:panelGrid columns="1" styleClass="second-column">
+            <h:outputLabel value="Тут будет картинка"/>
+        </h:panelGrid>
 
 
-<!--    <section id="graph-section">-->
-<!--        <canvas id="graphCanvas" width="250" height="250" style="border:1px solid #000000;"></canvas>-->
-<!--        <p id="message"></p>-->
-
-<!--        <script type="text/javascript" src="../scripts/graph.js"></script>-->
-<!--        <script type="text/javascript"> redrawFigure("#{controllerBean.r}")</script>-->
-<!--        <ui:repeat value="#{controllerBean.points}" var="point">-->
-<!--            <script-->
-<!--                    type="text/javascript">drawDot("#{point.x()}", "#{point.y()}", #{ point.result() })</script>-->
-<!--        </ui:repeat>-->
-<!--    </section>-->
-
-    <h:panelGroup>
-        <h:outputText value="История:"/>
         <h:dataTable value="#{tableResBean.resultList}" var="result" id="tries">
+            <f:facet name = "header">
+                <h:outputText value="История:"/>
+            </f:facet>
             <h:column><f:facet name="header">?</f:facet>#{result.isHit ? 'YES' : 'NO'}</h:column>
             <h:column><f:facet name="header">X</f:facet>#{result.x}</h:column>
             <h:column><f:facet name="header">Y</f:facet>#{result.y}</h:column>
             <h:column><f:facet name="header">R</f:facet>#{result.r}</h:column>
         </h:dataTable>
-    </h:panelGroup>
+
+    </h:panelGrid>
 </h:body>
 </html>
