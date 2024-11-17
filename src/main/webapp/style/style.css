@@ -15,10 +15,16 @@ p {
     height: 100%;
 }
 
-.first-column, .second-column{
+.first-column, .second-column, #start-table{
     width: 100%;
     text-align: center;
     height: 100%;
+}
+
+#start-table td {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 td, th{
@@ -28,15 +34,8 @@ td, th{
     width: 30%;
 }
 
-/*селектор идентификатора*/
-/*#tries {*/
-/*    height: 100px;*/
-/*    table-layout: fixed;*/
-/*}*/
-
 #tries {
     table-layout: fixed;
-    height: 100%;
     width: 100%;
     background-color: rgba(245, 245, 220, 0.5);
     color: black;

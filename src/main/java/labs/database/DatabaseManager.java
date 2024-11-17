@@ -1,5 +1,9 @@
 package labs.database;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.PersistenceContext;
 import labs.managedBeans.FormBean;
 import labs.model.Point;
 import lombok.Getter;
@@ -7,24 +11,20 @@ import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 
 @Getter
 @Setter
-public class DatabaseManager {
-    private static final String URL = "jdbc:postgresql://localhost:5432/studs";
-    private static final String USER = "s409577";
-    private static final String PASSWORD = "7Tpx3iO5o2XLp7ja";
-    private Connection connection;
-
+public class DatabaseManager implements Serializable {
     private static volatile DatabaseManager instance;
-    private static final Logger logger = LogManager.getLogger(DatabaseManager.class);
+    @PersistenceContext
+    private EntityManager manager;
 
-    public void connect() throws SQLException {
-        logger.info("Создание соединения...");
-        connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        logger.info("Соединение создано.");
+    public DatabaseManager() {
+        manager = Persistence.createEntityManagerFactory("default").createEntityManager();
+        //метод, который создает фабрику объектов EntityManager на основе конфигурации, заданной в файле persistence.xml
     }
 
     public static DatabaseManager getInstance(){
@@ -34,72 +34,46 @@ public class DatabaseManager {
         return instance;
     }
 
-    public void createPointsTable() {
-        logger.info("Создание таблицы результатов...");
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS points ("
-                + "ID SERIAL PRIMARY KEY, "
-                + "x REAL NOT NULL, "
-                + "y REAL NOT NULL,"
-                + "r REAL NOT NULL, "
-                + "isHit BOOLEAN NOT NULL"
-                + ");";
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(createTableSQL);
-            logger.info("Таблица результатов создана.");
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
     public void insertPoint(Point point) {
-        logger.info("Добавление точки...");
-        String insertSQL = "INSERT INTO points (x, y, r, isHit) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
-            preparedStatement.setDouble(1, point.getX());
-            preparedStatement.setDouble(2, point.getY());
-            preparedStatement.setDouble(3, point.getR());
-            preparedStatement.setBoolean(4, point.getIsHit());
-            preparedStatement.executeUpdate();
-            logger.info("Точка добавлена.");
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+        //если таблица не создана, она будет создана при первой транзакции
+        EntityTransaction transaction = manager.getTransaction();
+        try {
+            transaction.begin();
+            manager.persist(point);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()){
+                transaction.rollback();
+            }
         }
     }
 
     public ArrayList<Point> getPoints() {
-        //if exists
-        logger.info("Получение таблицы результатов...");
-        ArrayList<Point> points = new ArrayList<>();
-        String query = "SELECT IF EXISTS * FROM points ORDER BY id DESC";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                float x = resultSet.getFloat("x");
-                float y = resultSet.getFloat("y");
-                float r = resultSet.getFloat("r");
-                boolean isHit = resultSet.getBoolean("isHit");
-
-                Point point = new Point(x, y, r, isHit);
-                points.add(point);
+        EntityTransaction transaction = manager.getTransaction();
+        try {
+            transaction.begin();
+            ArrayList<Point> points = new ArrayList<>(manager.createQuery("select p from Point p", Point.class).getResultList());
+            transaction.commit();
+            return points;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+            return new ArrayList<>();
         }
-        logger.info("Получение таблицы результатов прошло успешно.");
-        return points;
     }
 
-    public void clearAll(){
-        //is exists
-        logger.info("Удаление таблицы результатов...");
-        String query = "DELETE IF EXISTS* FROM points";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
-            logger.info("Удаление таблицы результатов прошло успешно.");
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
+    public void clearAll() {
+        EntityTransaction transaction = manager.getTransaction();
+        try {
+            transaction.begin();
+            manager.createQuery("delete from Point p").executeUpdate();
+            transaction.commit();
+        } catch (Exception e){
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
         }
+
     }
 }

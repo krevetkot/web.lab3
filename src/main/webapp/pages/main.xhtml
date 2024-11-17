@@ -27,40 +27,47 @@
 
         <h:panelGrid columns="1" styleClass="first-column">
             <h:form id="main">
-<!--                как-то надо сделать разделение на строчки, я ебала-->
-                <h:outputLabel for="x" value="Выберите X (-3; 5)"/>
-                <h:inputText id="x" styleClass="coords-input" value="#{formBean.x}"
-                             required="true" maxlength="7"
-                             requiredMessage="Value X is required"
-                             validatorMessage="The value must be from -3 to 5">
-                    <f:converter converterId="jakarta.faces.Float"/>
-                    <f:validateDoubleRange minimum="-3" maximum="5"/>
-                </h:inputText>
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:outputLabel for="x" value="Выберите X (-3; 5)"/>
+                    <h:inputText id="x" styleClass="coords-input" value="#{formBean.x}"
+                                 required="true" maxlength="7"
+                                 requiredMessage="Value X is required"
+                                 validatorMessage="The value must be from -3 to 5">
+                        <f:converter converterId="jakarta.faces.Float"/>
+                        <f:validateDoubleRange minimum="-3" maximum="5"/>
+                    </h:inputText>
+                </h:panelGrid>
 
-                <h:outputText value="Выберите Y:"/>
-                <h:selectOneMenu id="yValue" value="#{formBean.y}">
-                    <f:selectItem itemValue="-2" itemLabel="-2"/>
-                    <f:selectItem itemValue="-1.5" itemLabel="-1.5"/>
-                    <f:selectItem itemValue="-1" itemLabel="-1"/>
-                    <f:selectItem itemValue="-0.5" itemLabel="-0.5"/>
-                    <f:selectItem itemValue="0" itemLabel="0"/>
-                    <f:selectItem itemValue="0.5" itemLabel="0.5"/>
-                    <f:selectItem itemValue="1" itemLabel="1"/>
-                </h:selectOneMenu>
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:outputText value="Выберите Y:"/>
+                    <h:selectOneMenu id="yValue" value="#{formBean.y}">
+                        <f:selectItem itemValue="-2" itemLabel="-2"/>
+                        <f:selectItem itemValue="-1.5" itemLabel="-1.5"/>
+                        <f:selectItem itemValue="-1" itemLabel="-1"/>
+                        <f:selectItem itemValue="-0.5" itemLabel="-0.5"/>
+                        <f:selectItem itemValue="0" itemLabel="0"/>
+                        <f:selectItem itemValue="0.5" itemLabel="0.5"/>
+                        <f:selectItem itemValue="1" itemLabel="1"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
 
-                <h:outputText value="Выберите R:"/>
-                <h:inputText id="rValue" value="#{formBean.r}" readonly="true"/>
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:outputText value="Выберите R:"/>
+                    <h:inputText id="rValue" value="#{formBean.r}" readonly="true"/>
+                </h:panelGrid>
 
 
-                <h:commandButton value="Отправить" styleClass="btn">
-                    <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
-                </h:commandButton>
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:commandButton value="Отправить" styleClass="btn">
+                        <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
+                    </h:commandButton>
 
-                <h:commandButton value="Вернуться" styleClass="btn" id="toStartButton" action="toStart" outcome="toStart"/>
+                    <h:commandButton value="Вернуться" styleClass="btn" id="toStartButton" action="toStart" outcome="toStart"/>
 
-                <h:commandButton value="Очистить таблицу" styleClass="btn" id="clearButton" action="toIndex">
-                    <f:ajax execute="@form" listener="#{tableResBean.clearTable()}" render="@form tries"/>
-                </h:commandButton>
+                    <h:commandButton value="Очистить таблицу" styleClass="btn" id="clearButton" action="toIndex">
+                        <f:ajax execute="@form" listener="#{tableResBean.clearTable()}" render="@form tries"/>
+                    </h:commandButton>
+                </h:panelGrid>
             </h:form>
         </h:panelGrid>
 
