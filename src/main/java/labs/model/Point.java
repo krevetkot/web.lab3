@@ -1,6 +1,7 @@
 package labs.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -17,6 +18,7 @@ public class Point {
     private float r;
     private boolean isHit;
     @Id
+    @GeneratedValue
     private Long id;
     public Point(float x, float y, float r, boolean isHit){
         this.x = x;
