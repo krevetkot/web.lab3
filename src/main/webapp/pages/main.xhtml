@@ -27,14 +27,15 @@
         <h:panelGrid columns="1" styleClass="first-column">
             <h:form id="main">
                 <h:panelGrid columns="1" styleClass="first-column">
-                    <h:outputLabel for="x" value="Выберите X (-3; 5)"/>
-                    <h:inputText id="x" styleClass="coords-input" value="#{formBean.x}"
+                    <h:outputLabel for="xValue" value="Выберите X (-3; 5)"/>
+                    <h:inputText id="xValue" styleClass="coords-input" value="#{formBean.x}"
                                  required="true" maxlength="7"
-                                 requiredMessage="Value X is required"
-                                 validatorMessage="The value must be from -3 to 5">
+                                 requiredMessage="X не может быть пустым."
+                                 validatorMessage="X должен быть от -3 до 5">
                         <f:converter converterId="jakarta.faces.Float"/>
                         <f:validateDoubleRange minimum="-3" maximum="5"/>
                     </h:inputText>
+                    <h:message for="xValue" style="color: red;" />
                 </h:panelGrid>
 
                 <h:panelGrid columns="1" styleClass="first-column">
@@ -52,10 +53,11 @@
 
                 <h:panelGrid columns="1" styleClass="first-column">
                     <h:outputLabel value="Текущее значение R:" />
-                    <h:inputText id="rValue" value="#{formBean.r}" >
+                    <h:inputText id="rValue" value="#{formBean.r}" validatorMessage="R должен быть от 2 до 5">
                         <f:validateDoubleRange minimum="2" maximum="5"/>
                         <f:validateRequired/>
                     </h:inputText>
+                    <h:message for="rValue" style="color: red;" />
 
 <!--                    onSlide="handleSlide(event)" для перерисовки графика-->
 
@@ -97,4 +99,6 @@
 
     </h:panelGrid>
 </h:body>
+
+
 </html>
