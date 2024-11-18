@@ -23,6 +23,11 @@ public class FormBean implements Serializable {
     private  double x;
     private double y;
     private double r;
+
+    private  double otherX;
+    private double otherY;
+    private double otherR;
+
     private DatabaseManager dbManager;
     private static final Logger logger = LogManager.getLogger(FormBean.class);
     private Validator validator;

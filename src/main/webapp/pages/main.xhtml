@@ -15,7 +15,8 @@
     <link href="/weblab3/style/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" href="../style/favicon.png" type="image/x-icon"/>
 <!--    <script type="text/javascript" src="../js/script.js"/>-->
-    <h:outputScript type="text/javascript" src="../js/script.js"/>
+    <h:outputScript defer="true" type="text/javascript" src="../js/script.js"/>
+    <script defer="defer" type="text/javascript" src="../js/area.js"></script>
     <h:outputScript src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"/>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -25,7 +26,7 @@
     <h:panelGrid columns="3" styleClass="main-table">
 
         <h:panelGrid columns="1" styleClass="first-column">
-            <h:form id="main">
+            <h:form id="main-form">
                 <h:panelGrid columns="1" styleClass="first-column">
                     <h:outputLabel for="xValue" value="Выберите X (-3; 5)"/>
                     <h:inputText id="xValue" styleClass="coords-input" value="#{formBean.x}"
@@ -61,15 +62,20 @@
 
 <!--                    onSlide="handleSlide(event)" для перерисовки графика-->
 
-                    <p:slider id="rSlider" for="rValue" minValue="2" maxValue="5" step="0.1" style="width: 100%">
+                    <p:slider id="rSlider" for="rValue" minValue="2" maxValue="5" step="0.1" style="width: 100%" widgetVar="widget_main_form_rSlider"
+                              onSlide="handleSlide(event)">
                         <f:validateRequired/>
                         <f:validateDoubleRange minimum="2" maximum="5"/>
                     </p:slider>
                 </h:panelGrid>
 
+                <h:inputHidden id="hiddenX" value="#{formBean.otherX}" />
+                <h:inputHidden id="hiddenY" value="#{formBean.otherY}" />
+                <h:inputHidden id="hiddenR" value="#{formBean.otherR}" />
+
 
                 <h:panelGrid columns="1" styleClass="first-column">
-                    <h:commandButton value="Отправить" styleClass="btn">
+                    <h:commandButton value="Отправить" styleClass="btn" id="submitButton">
                         <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
                     </h:commandButton>
 
@@ -80,10 +86,20 @@
                     </h:commandButton>
                 </h:panelGrid>
             </h:form>
+
+
         </h:panelGrid>
 
         <h:panelGrid columns="1" styleClass="second-column">
-            <h:outputLabel value="Тут будет картинка"/>
+                <canvas id='area' width='350' height='350' onclick='onClickFunction(event)'></canvas>
+                <script type="text/javascript"> drawArea("#{formBean.r}")</script>
+                <ui:repeat value="#{tableResBean.resultList}" var="point">
+                    <script defer="defer" type="text/javascript">
+                        drawPoint( "#{point.isHit()}", "#{point.x()}", "#{point.y()}", "#{point.r}");
+                    </script>
+                </ui:repeat>
+
+
         </h:panelGrid>
 
 
@@ -99,6 +115,5 @@
 
     </h:panelGrid>
 </h:body>
-
 
 </html>
