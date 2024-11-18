@@ -81,3 +81,16 @@ p i {
 #btnToMain{
     align-items: center;
 }
+
+body .ui-slider .ui-slider-range {
+    background: maroon;
+}
+
+body .ui-slider .ui-slider-handle {
+    border: 2px solid maroon;
+}
+
+body .ui-slider .ui-slider-handle.ui-state-hover {
+    border: 2px solid maroon;
+    background: maroon;
+}

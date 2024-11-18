@@ -34,7 +34,7 @@ public class FormBean implements Serializable {
         logger.info("formBean.init() started");
         x = 0;
         y = 0;
-        r = 1;
+        r = 2;
         dbManager = DatabaseManager.getInstance();
         validator = new Validator();
         logger.info("formBean.init() successfully finished");
