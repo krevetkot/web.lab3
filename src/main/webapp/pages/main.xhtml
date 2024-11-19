@@ -15,7 +15,6 @@
     <link href="/weblab3/style/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" href="../style/favicon.png" type="image/x-icon"/>
 <!--    <script type="text/javascript" src="../js/script.js"/>-->
-    <h:outputScript defer="true" type="text/javascript" src="../js/script.js"/>
     <script defer="defer" type="text/javascript" src="../js/area.js"></script>
     <h:outputScript src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"/>
 
@@ -75,7 +74,7 @@
 
 
                 <h:panelGrid columns="1" styleClass="first-column">
-                    <h:commandButton value="Отправить" styleClass="btn" id="submitButton">
+                    <h:commandButton value="Отправить" styleClass="btn" id="submitButton" oncomplete="handleSlide(event)">
                         <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
                     </h:commandButton>
 
@@ -92,14 +91,12 @@
 
         <h:panelGrid columns="1" styleClass="second-column">
                 <canvas id='area' width='350' height='350' onclick='onClickFunction(event)'></canvas>
-                <script type="text/javascript"> drawArea("#{formBean.r}")</script>
-                <ui:repeat value="#{tableResBean.resultList}" var="point">
-                    <script defer="defer" type="text/javascript">
-                        drawPoint( "#{point.isHit()}", "#{point.x()}", "#{point.y()}", "#{point.r}");
-                    </script>
-                </ui:repeat>
-
-
+<!--                <script type="text/javascript"> drawArea("#{formBean.r}")</script>-->
+<!--                <ui:repeat value="#{tableResBean.resultList}" var="point">-->
+<!--                    <script defer="defer" type="text/javascript">-->
+<!--                        drawPoint( "#{point.isHit()}", "#{point.x()}", "#{point.y()}", "#{point.r}");-->
+<!--                    </script>-->
+<!--                </ui:repeat>-->
         </h:panelGrid>
 
 
