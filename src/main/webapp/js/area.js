@@ -8,15 +8,29 @@ function handleSlide(event) {
 function onClickFunction() {
     const canvas = document.getElementById("area");
     const rect = canvas.getBoundingClientRect();
-    const xDom = event.clientX - rect.left - canvas.width / 2;
-    const yDom = canvas.height / 2 - (event.clientY - rect.top);
+    const koef = 125;
+
+    // Координаты клика относительно верхнего левого угла canvas
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    // Преобразование в координаты относительно центра canvas
+    const canvasCenterX = canvas.width / 2;
+    const canvasCenterY = canvas.height / 2;
+
+    const relativeX = clickX - canvasCenterX;
+    const relativeY = canvasCenterY - clickY; // Y нужно инвертировать, так как у вас ось Y направлена вверх
+
+    // Преобразование координат с учетом масштаба
+
+
 
     try {
         const r = PF("widget_main_form_rSlider").getValue();
-        const x = xDom * (4 / canvas.width);
-        const y = yDom * (4 / canvas.height);
+        const graphX = (relativeX*r / koef).toFixed(4); // Округление до 2 знаков после запятой
+        const graphY = (relativeY*r / koef).toFixed(4);
 
-        sendPoint((x/2*r).toFixed(4).toString(), (y/4*r).toFixed(4), r);
+        sendPoint(graphX.toString(), graphY.toString(), r);
     } catch (e) {
         alert(e.message);
         //заменить на вывод через сообщение
@@ -24,26 +38,21 @@ function onClickFunction() {
 }
 
 function sendPoint(x, y, r) {
-    // const hiddenX = document.getElementById("main-form:hiddenX");
-    // const hiddenY = document.getElementById("main-form:hiddenY");
-    // const hiddenR = document.getElementById("main-form:hiddenR");
-
-    const hiddenX = document.getElementById("main-form:xValue");
-    const hiddenY = document.getElementById("main-form:yValue");
-    const hiddenR = document.getElementById("main-form:rValue");
+    const hiddenX = document.getElementById("hidden-form:hiddenX");
+    const hiddenY = document.getElementById("hidden-form:hiddenY");
+    const hiddenR = document.getElementById("hidden-form:hiddenR");
 
     hiddenX.value = x;
     hiddenY.value = y;
     hiddenR.value = r;
 
-    document.getElementById("main-form:submitButton").click();
-    //нужна еще одна кнопка для отправки хидденов
+    document.getElementById("hidden-form:hiddenSubmitButton").click();
 }
 
 function isItHit(x, y, r){
     x = parseFloat(x);
     return ((x >= 0) && (x <= r) && (y >= 0) && (y <= r) || //in rectangle
-        (x>=0) && (y >= x * r/2 - (r/2)) && (y <= 0) || //in triangle
+        (x>=0) && (y >= x/2 - (r/2)) && (y <= 0) || //in triangle
         (x * x + y * y <= r * r ) && (x <= 0) && (y <= 0) //in circle
     );
 }

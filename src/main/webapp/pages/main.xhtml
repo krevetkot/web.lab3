@@ -5,8 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:p="http://primefaces.org/ui">
 
 
 
@@ -14,7 +13,6 @@
     <title>Веб лаб 3</title>
     <link href="/weblab3/style/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" href="../style/favicon.png" type="image/x-icon"/>
-<!--    <script type="text/javascript" src="../js/script.js"/>-->
     <script defer="defer" type="text/javascript" src="../js/area.js"></script>
     <h:outputScript src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"/>
 
@@ -59,8 +57,6 @@
                     </h:inputText>
                     <h:message for="rValue" style="color: red;" />
 
-<!--                    onSlide="handleSlide(event)" для перерисовки графика-->
-
                     <p:slider id="rSlider" for="rValue" minValue="2" maxValue="5" step="0.1" style="width: 100%" widgetVar="widget_main_form_rSlider"
                               onSlide="handleSlide(event)">
                         <f:validateRequired/>
@@ -68,13 +64,11 @@
                     </p:slider>
                 </h:panelGrid>
 
-                <h:inputHidden id="hiddenX" value="#{formBean.otherX}" />
-                <h:inputHidden id="hiddenY" value="#{formBean.otherY}" />
-                <h:inputHidden id="hiddenR" value="#{formBean.otherR}" />
+
 
 
                 <h:panelGrid columns="1" styleClass="first-column">
-                    <h:commandButton value="Отправить" styleClass="btn" id="submitButton" oncomplete="handleSlide(event)">
+                    <h:commandButton value="Отправить" styleClass="btn" id="submitButton">
                         <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
                     </h:commandButton>
 
@@ -86,17 +80,21 @@
                 </h:panelGrid>
             </h:form>
 
+            <h:form id="hidden-form">
+                <h:inputHidden id="hiddenX" value="#{formBean.otherX}" />
+                <h:inputHidden id="hiddenY" value="#{formBean.otherY}" />
+                <h:inputHidden id="hiddenR" value="#{formBean.otherR}" />
+<!--                 disabled="true"-->
+                <h:commandButton styleClass="btn" id="hiddenSubmitButton" style="visibility: hidden;">
+                    <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.otherX, formBean.otherY, formBean.otherR)}" render="@form tries"/>
+                </h:commandButton>
+            </h:form>
+
 
         </h:panelGrid>
 
         <h:panelGrid columns="1" styleClass="second-column">
                 <canvas id='area' width='350' height='350' onclick='onClickFunction(event)'></canvas>
-<!--                <script type="text/javascript"> drawArea("#{formBean.r}")</script>-->
-<!--                <ui:repeat value="#{tableResBean.resultList}" var="point">-->
-<!--                    <script defer="defer" type="text/javascript">-->
-<!--                        drawPoint( "#{point.isHit()}", "#{point.x()}", "#{point.y()}", "#{point.r}");-->
-<!--                    </script>-->
-<!--                </ui:repeat>-->
         </h:panelGrid>
 
 
