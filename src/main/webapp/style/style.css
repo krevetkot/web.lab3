@@ -94,3 +94,10 @@ body .ui-slider .ui-slider-handle.ui-state-hover {
     border: 2px solid maroon;
     background: maroon;
 }
+
+#clock {
+    /*background-color: #f3f3f3;*/
+    display: block;
+    margin: 50px auto;
+    border-radius: 50%;
+}

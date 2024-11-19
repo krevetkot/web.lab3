@@ -10,6 +10,7 @@
     <title>Веб лаб 3</title>
     <link href="/weblab3/style/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" href="../style/favicon.png" type="image/x-icon"/>
+    <script defer="defer" type="text/javascript" src="../js/clock.js"></script>
     <h:outputScript src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"/>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -21,6 +22,7 @@
         <h:form>
             <h:commandButton value="Начать!" id="btnToMain" class="btn" action="toMain" outcome="toMain"/>
         </h:form>
+        <canvas id="clock" width="350" height="350"></canvas>
 
     </h:panelGrid>
 </h:body>
