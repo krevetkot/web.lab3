@@ -1,5 +1,11 @@
 window.addEventListener('load', drawArea(0));
 
+function refreshPoints(){
+    console.info('3');
+    const rValue = document.getElementById("main-form:rValue").value;
+    drawArea(rValue);
+}
+
 function handleSlide(event) {
     const rValue = PF("widget_main_form_rSlider").getValue();
     drawArea(rValue);

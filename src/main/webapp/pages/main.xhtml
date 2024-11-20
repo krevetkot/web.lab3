@@ -67,7 +67,11 @@
 
                 <h:panelGrid columns="1" styleClass="first-column">
                     <h:commandButton value="Отправить" styleClass="btn" id="submitButton">
-                        <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"/>
+                        <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"
+                                onevent="function (data) { if (data.status === 'success') {
+                                    refreshPoints();
+                                }}"
+                        />
                     </h:commandButton>
 
                     <h:commandButton value="Вернуться" styleClass="btn" id="toStartButton" action="toStart" outcome="toStart"/>
@@ -84,7 +88,11 @@
                 <h:inputHidden id="hiddenR" value="#{formBean.otherR}" />
 <!--                 disabled="true"-->
                 <h:commandButton styleClass="btn" id="hiddenSubmitButton" style="visibility: hidden;">
-                    <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.otherX, formBean.otherY, formBean.otherR)}" render="@form tries"/>
+                    <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.otherX, formBean.otherY, formBean.otherR)}" render="@form tries"
+                        onevent="function (data) { if (data.status === 'success') {
+                                refreshPoints();
+                            }}"
+                    />
                 </h:commandButton>
             </h:form>
 

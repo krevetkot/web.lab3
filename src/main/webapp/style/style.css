@@ -47,7 +47,7 @@ td, th{
 
 body {
     background-image: url('bg.jpg');
-    background-repeat: no-repeat;
+    background-repeat: repeat-y;
     background-size: cover;
 }
 
