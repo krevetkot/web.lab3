@@ -24,7 +24,7 @@ public class FormBean implements Serializable {
     private double y;
     private double r;
 
-    private  double otherX;
+    private double otherX;
     private double otherY;
     private double otherR;
 

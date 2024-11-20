@@ -15,8 +15,8 @@
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/studs"/>
 
 <!--            потом уберу-->
-            <property name="hibernate.connection.password" value="7Tpx3iO5o2XLp7ja"/>
-            <property name="hibernate.connection.username" value="s409577"/>
+            <property name="hibernate.connection.password" value=""/>
+            <property name="hibernate.connection.username" value=""/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgresPlusDialect"/>
             <property name="show_sql" value="true"/>

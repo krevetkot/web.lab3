@@ -21,12 +21,9 @@ function onClickFunction() {
     const relativeX = clickX - canvasCenterX;
     const relativeY = canvasCenterY - clickY; // Y нужно инвертировать, так как у вас ось Y направлена вверх
 
-    // Преобразование координат с учетом масштаба
-
-
-
     try {
         const r = PF("widget_main_form_rSlider").getValue();
+        // Преобразование координат с учетом масштаба
         const graphX = (relativeX*r / koef).toFixed(4); // Округление до 2 знаков после запятой
         const graphY = (relativeY*r / koef).toFixed(4);
 
