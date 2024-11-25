@@ -8,9 +8,7 @@ import labs.model.Point;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Named("tableResBean")

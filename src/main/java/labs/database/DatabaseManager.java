@@ -4,15 +4,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceContext;
-import labs.managedBeans.FormBean;
 import labs.model.Point;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.io.Serializable;
-import java.sql.*;
 import java.util.ArrayList;
 
 @Getter
