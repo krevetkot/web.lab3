@@ -33,7 +33,6 @@ public class DatabaseManager implements Serializable {
     }
 
     public void insertPoint(Point point) {
-        //если таблица не создана, она будет создана при первой транзакции
         logger.info("Добавление точки...");
         EntityTransaction transaction = manager.getTransaction();
         try {
