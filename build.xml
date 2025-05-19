@@ -39,5 +39,14 @@
         <delete dir="${build.dir}"/>
     </target>
 
+    <target name="xml">
+        <xmlvalidate lenient="yes" failonerror="true">
+            <fileset dir="${src.dir}" includes="**/*.xml"/>
+        </xmlvalidate>
+    </target>
+
+    <target name="doc">
+        <javadoc sourcepath="${src.dir}" destdir="${doc.dir}"/>
+    </target>
 
 </project>
