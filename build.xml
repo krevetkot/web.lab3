@@ -34,9 +34,20 @@
         </war>
     </target>
 
-
     <target name="clean">
         <delete dir="${build.dir}"/>
+    </target>
+
+
+    <target name="scp">
+        <exec executable="${pscp.path}" failonerror="true">
+            <arg value="-P"/>
+            <arg value="2222"/>
+            <arg value="-pw"/>
+            <arg value="${scp.password}"/>
+            <arg value="${build.dir}/${ant.project.name}.war"/>
+            <arg value="${scp.user}@${scp.server}:${scp.dir}"/>
+        </exec>
     </target>
 
 
