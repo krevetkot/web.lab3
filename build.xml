@@ -46,7 +46,31 @@
     </target>
 
     <target name="doc">
-        <javadoc sourcepath="${src.dir}" destdir="${doc.dir}"/>
+
+        <mkdir dir="${build.dir}/javadoc"/>
+        <javadoc sourcepath="${java.dir}" destdir="${build.dir}/javadoc" classpathref="classpath">
+            <doctitle>${ant.project.name} API Documentation</doctitle>
+            <classpath refid="classpath"/>
+        </javadoc>
+
+        <mkdir dir="${build.dir}/checksums"/>
+        <checksum todir="${build.dir}/checksums" algorithm="MD5">
+            <fileset dir="${build.dir}"/>
+        </checksum>
+        <checksum todir="${build.dir}/checksums" algorithm="SHA-1">
+            <fileset dir="${build.dir}"/>
+        </checksum>
+
+        <mkdir dir="${build.dir}/META-INF"/>
+        <manifest file="${build.dir}/META-INF/MANIFEST.MF">
+            <attribute name="Created-By" value="Apache Ant"/>
+            <attribute name="Built-By" value="${user.name}"/>
+        </manifest>
+
+        <jar destfile="${build.dir}/${ant.project.name}-doc.jar"
+             basedir="${build.dir}/javadoc"
+             manifest="${build.dir}/META-INF/MANIFEST.MF"/>
+
     </target>
 
 </project>
