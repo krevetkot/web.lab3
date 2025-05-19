@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Веб лаб 3</title>
+    <link href="/weblab3/style/style.css" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="../style/favicon.png" type="image/x-icon"/>
+    <script defer="defer" type="text/javascript" src="../js/area.js"></script>
+    <h:outputScript src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"/>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</h:head>
+
+<h:body>
+    <h:panelGrid columns="3" styleClass="main-table">
+
+        <h:panelGrid columns="1" styleClass="first-column">
+            <h:form id="main-form">
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:outputLabel for="xValue" value="#{msg.chooseX}"/>
+                    <h:inputText id="xValue" styleClass="coords-input" value="#{formBean.x}"
+                                 required="true" maxlength="7"
+                                 requiredMessage="#{msg.XIsNotEmpty}"
+                                 validatorMessage="#{msg.XInBounds}">
+                        <f:converter converterId="jakarta.faces.Float"/>
+                        <f:validateDoubleRange minimum="-3" maximum="5"/>
+                    </h:inputText>
+                    <h:message for="xValue" style="color: red;" />
+                </h:panelGrid>
+
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:outputText value="#{msg.chooseY}"/>
+                    <h:selectOneMenu id="yValue" value="#{formBean.y}">
+                        <f:selectItem itemValue="-2" itemLabel="-2"/>
+                        <f:selectItem itemValue="-1.5" itemLabel="-1.5"/>
+                        <f:selectItem itemValue="-1" itemLabel="-1"/>
+                        <f:selectItem itemValue="-0.5" itemLabel="-0.5"/>
+                        <f:selectItem itemValue="0" itemLabel="0"/>
+                        <f:selectItem itemValue="0.5" itemLabel="0.5"/>
+                        <f:selectItem itemValue="1" itemLabel="1"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:outputLabel value="#{msg.currentR}" />
+                    <h:inputText id="rValue" value="#{formBean.r}" validatorMessage="#{msg.RInBounds}">
+                        <f:validateDoubleRange minimum="2" maximum="5"/>
+                        <f:validateRequired/>
+                    </h:inputText>
+                    <h:message for="rValue" style="color: red;" />
+
+                    <p:slider id="rSlider" for="rValue" minValue="2" maxValue="5" step="0.1" style="width: 100%" widgetVar="widget_main_form_rSlider"
+                              onSlide="handleSlide(event)">
+                        <f:validateRequired/>
+                        <f:validateDoubleRange minimum="2" maximum="5"/>
+                    </p:slider>
+                </h:panelGrid>
+
+                <h:panelGrid columns="1" styleClass="first-column">
+                    <h:commandButton value="#{msg.sendButton}" styleClass="btn" id="submitButton">
+                        <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.x, formBean.y, formBean.r)}" render="@form tries"
+                                onevent="function func (data) { if (data.status === 'success') {
+                                    refreshPoints();
+                                }}"
+                        />
+                    </h:commandButton>
+
+                    <h:commandButton value="#{msg.returnButton}" styleClass="btn" id="toStartButton" action="toStart" outcome="toStart"/>
+
+                    <h:commandButton value="#{msg.cleanButton}" styleClass="btn" id="clearButton">
+                        <f:ajax execute="@form" listener="#{tableResBean.clearTable()}" render="@form tries"
+                                onevent="function func (data) { if (data.status === 'success') {
+                                refreshPoints();
+                            }}"/>
+                    </h:commandButton>
+                </h:panelGrid>
+            </h:form>
+
+            <h:form id="hidden-form">
+                <h:inputHidden id="hiddenX" value="#{formBean.otherX}" />
+                <h:inputHidden id="hiddenY" value="#{formBean.otherY}" />
+                <h:inputHidden id="hiddenR" value="#{formBean.otherR}" />
+                <h:commandButton styleClass="btn" id="hiddenSubmitButton" style="visibility: hidden;">
+                    <f:ajax execute="@form" listener="#{formBean.addPoint(formBean.otherX, formBean.otherY, formBean.otherR)}" render="@form tries"
+                        onevent="function func (data) { if (data.status === 'success') {
+                                refreshPoints();
+                            }}"
+                    />
+                </h:commandButton>
+            </h:form>
+
+
+        </h:panelGrid>
+
+        <h:panelGrid columns="1" styleClass="second-column">
+                <canvas id='area' width='350' height='350' onclick='onClickFunction(event)'></canvas>
+        </h:panelGrid>
+
+
+        <h:dataTable value="#{tableResBean.resultList}" var="result" id="tries">
+            <f:facet name = "header">
+                <h:outputText value="#{msg.history}"/>
+            </f:facet>
+            <h:column><f:facet name="header">?</f:facet>#{result.isHit ? 'YES' : 'NO'}</h:column>
+            <h:column><f:facet name="header">X</f:facet>#{result.x}</h:column>
+            <h:column><f:facet name="header">Y</f:facet>#{result.y}</h:column>
+            <h:column><f:facet name="header">R</f:facet>#{result.r}</h:column>
+        </h:dataTable>
+
+    </h:panelGrid>
+</h:body>
+
+</html>

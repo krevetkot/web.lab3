@@ -1,0 +1,103 @@
+h1 {
+    color: maroon;
+    font: 2rem "Fira Sans", sans-serif;
+    height: 20px;
+    text-align: center;
+}
+
+p {
+    font: 1.5rem "Garamond", sans-serif;
+}
+
+.main-table {
+    width: 100%;
+    text-align: center;
+    height: 100%;
+}
+
+.first-column, .second-column, #start-table{
+    width: 100%;
+    text-align: center;
+    height: 100%;
+}
+
+#start-table td {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+td, th{
+    /*border: thin solid black;*/
+    padding: 10px 20px;
+    vertical-align: top;
+    width: 30%;
+}
+
+#tries {
+    table-layout: fixed;
+    width: 100%;
+    background-color: rgba(245, 245, 220, 0.5);
+    color: black;
+}
+
+#tries td{
+    align-content: center;
+}
+
+body {
+    background-image: url('bg.jpg');
+    background-repeat: repeat-y;
+    background-size: cover;
+}
+
+
+#tdWithArea {
+    width: 20%;
+}
+
+/*селектор потомков (i - потомок p)*/
+p i {
+    color: maroon;
+}
+
+#otherX, #labelWithOtherX{
+    visibility: hidden;
+}
+/*это оставим для момента обработки координат по клику*/
+
+.btn{
+    display: block;
+    margin-top: 20px; /* Расстояние между заголовком и кнопкой */
+    padding: 10px 20px;
+    background-color: beige; /* Бежевый цвет фона кнопки */
+    border: maroon;
+    color: maroon; /* Красный цвет текста */
+    font-size: 16px;
+    cursor: pointer;
+    align-items: center;
+}
+
+#btnToMain{
+    align-items: center;
+}
+
+body .ui-slider .ui-slider-range {
+    background: maroon;
+}
+
+body .ui-slider .ui-slider-handle {
+    border: 2px solid maroon;
+}
+
+body .ui-slider .ui-slider-handle.ui-state-hover {
+    border: 2px solid maroon;
+    background: maroon;
+}
+
+#clock {
+    /*background-color: #f3f3f3;*/
+    display: block;
+    margin: 50px auto;
+    border-radius: 50%;
+}

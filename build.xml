@@ -26,10 +26,22 @@
             <fileset dir="${resources.dir}"/>
         </copy>
 
+        <jar destfile="${build.dir}/${ant.project.name}.jar">
+            <fileset dir="${classes.dir}"/>
+            <manifest>
+                <attribute name="Created-By" value="krevetkot &amp; darb0ga"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+            </manifest>
+        </jar>
+
         <war destfile="${build.dir}/${ant.project.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
-            <fileset dir="${build.dir}">
-                <include name="**/*.*"/>
-            </fileset>
+            <fileset dir="${build.dir}"/>
+            <manifest>
+                <attribute name="Created-By" value="krevetkot &amp; darb0ga"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+            </manifest>
             <classes dir="${classes.dir}"/>
         </war>
 
@@ -52,7 +64,6 @@
     </target>
 
     <target name="music">
-        <echo message="Сборка завершена! Воспроизводим музыку..."/>
         <exec executable="powershell" spawn="true">
             <arg value="-c"/>
             <arg value="(New-Object Media.SoundPlayer '${music.file}').PlaySync();"/>
@@ -60,13 +71,75 @@
     </target>
 
     <target name="native2ascii">
-        <echo message="***** NATIVE2ASCII STARTED *****"/>
         <delete dir="${native2ascii.resources}"/>
         <native2ascii src="${resources.dir}"
                       dest="${native2ascii.resources}"
                       includes="**/*.properties"/>
-        <echo message="***** NATIVE2ASCII COMPLETED *****"/>
     </target>
 
+    <target name="alt">
+        <delete dir="${alt.dir}"/>
+        <property file="${replacements.file}"/>
+        <copy todir="${alt.dir}">
+            <fileset dir="${src.dir}"/>
+        </copy>
+
+        <!--        <apply-replacements target.dir="${alt.dir}"/>-->
+
+        <!-- Генерируем Java-класс для замен -->
+        <echo file="${alt.dir}/Replacer.java"><![CDATA[
+import java.nio.file.*;
+import java.util.*;
+import java.io.*;
+
+public class Replacer {
+    public static void main(String[] args) throws Exception {
+        System.out.println("[DEBUG] Replacement process started");
+        // Загрузка замен
+        Map<String,String> replaces = new HashMap<>();
+        try (InputStream is = new FileInputStream("${replacements.file}")) {
+            Properties props = new Properties();
+            props.load(is);
+            props.forEach((k,v) -> replaces.put((String)k, (String)v));
+            System.out.println("[DEBUG] Loaded replacements: " + replaces);
+        }
+
+        // Обработка файлов
+        Files.walk(Paths.get("./"))
+            .filter(p -> p.toString().endsWith(".java") && !p.toString().contains("Replacer.java"))
+            .forEach(p -> {
+                try {
+                    String originalContent = new String(Files.readAllBytes(p));
+                    String modifiedContent = originalContent;
+
+                    for (Map.Entry<String,String> e : replaces.entrySet()) {
+                        modifiedContent = modifiedContent.replace(e.getKey(), e.getValue());
+                    }
+
+                    if (!originalContent.equals(modifiedContent)) {
+                        Files.write(p, modifiedContent.getBytes());
+                    }
+                } catch (Exception e) {
+                    System.err.println("[ERROR] In file: " + p);
+                    e.printStackTrace();
+                }
+            });
+        System.out.println("[DEBUG] Replacement process completed");
+    }
+}
+]]></echo>
+
+        <javac srcdir="${alt.dir}" includes="Replacer.java"
+               includeantruntime="false" debug="true" verbose="true">
+            <compilerarg value="-Xlint:all"/>
+        </javac>
+
+        <java classname="Replacer" fork="true" dir="${alt.dir}" failonerror="true">
+            <classpath path="${alt.dir}"/>
+<!--            <redirector outputproperty="replacer.output" alwayslog="true"/>-->
+        </java>
+
+
+    </target>
 
 </project>
