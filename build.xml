@@ -32,12 +32,13 @@
             </fileset>
             <classes dir="${classes.dir}"/>
         </war>
+
+        <antcall target="music"/>
     </target>
 
     <target name="clean">
         <delete dir="${build.dir}"/>
     </target>
-
 
     <target name="scp">
         <exec executable="${pscp.path}" failonerror="true">
@@ -49,6 +50,15 @@
             <arg value="${scp.user}@${scp.server}:${scp.dir}"/>
         </exec>
     </target>
+
+    <target name="music">
+        <echo message="Сборка завершена! Воспроизводим музыку..."/>
+        <exec executable="powershell" spawn="true">
+            <arg value="-c"/>
+            <arg value="(New-Object Media.SoundPlayer '${music.file}').PlaySync();"/>
+        </exec>
+    </target>
+
 
 
 </project>
