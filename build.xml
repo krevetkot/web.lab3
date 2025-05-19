@@ -59,6 +59,14 @@
         </exec>
     </target>
 
+    <target name="native2ascii">
+        <echo message="***** NATIVE2ASCII STARTED *****"/>
+        <delete dir="${native2ascii.resources}"/>
+        <native2ascii src="${resources.dir}"
+                      dest="${native2ascii.resources}"
+                      includes="**/*.properties"/>
+        <echo message="***** NATIVE2ASCII COMPLETED *****"/>
+    </target>
 
 
 </project>

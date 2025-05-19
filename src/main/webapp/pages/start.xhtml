@@ -16,9 +16,9 @@
 
 <h:body>
     <h:panelGrid columns="1" id="start-table">
-        <h1>Слонимская Ксения Григорьевна, P3231, вариант 31812</h1>
+        <h1>"#{msg.author}"</h1>
         <h:form>
-            <h:commandButton value="Начать!" id="btnToMain" class="btn" action="toMain" outcome="toMain"/>
+            <h:commandButton value="#{msg.startButton}" id="btnToMain" class="btn" action="toMain" outcome="toMain"/>
         </h:form>
         <canvas id="clock" width="350" height="350"></canvas>
 
