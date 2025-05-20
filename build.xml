@@ -180,6 +180,20 @@
             <fileset dir="${test.reports.dir}/raw" includes="TEST-*.xml"/>
             <report format="noframes" todir="${test.reports.dir}"/>
         </junitreport>
+
+        <exec executable="git" failonerror="true">
+            <arg value="add"/>
+            <arg value="-f"/>
+            <arg value="${test.reports.dir}/TESTS-TestSuites.xml"/>
+        </exec>
+        <exec executable="git" failonerror="true">
+            <arg value="commit"/>
+            <arg value="-m"/>
+            <arg value="JUnit report"/>
+        </exec>
+        <exec executable="git" failonerror="true">
+            <arg value="push"/>
+        </exec>
     </target>
 
 </project>
