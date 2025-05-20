@@ -38,7 +38,7 @@ td, th{
     table-layout: fixed;
     width: 100%;
     background-color: rgba(245, 245, 220, 0.5);
-    color: black;
+    color: #051728;
 }
 
 #tries td{
