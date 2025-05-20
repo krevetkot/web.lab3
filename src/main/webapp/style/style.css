@@ -1,5 +1,5 @@
 h1 {
-    color: maroon;
+    color: #13faf3;
     font: 2rem "Fira Sans", sans-serif;
     height: 20px;
     text-align: center;
@@ -38,7 +38,7 @@ td, th{
     table-layout: fixed;
     width: 100%;
     background-color: rgba(245, 245, 220, 0.5);
-    color: #051728;
+    color: #000000;
 }
 
 #tries td{
