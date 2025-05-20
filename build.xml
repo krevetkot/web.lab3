@@ -16,8 +16,8 @@
 
 
     <target name="build" depends="compile">
-<!--        <property name="source.dir" value="${src.dir}"/>-->
-<!--        <echo message="Building from: ${source.dir}"/>-->
+        <!--        <property name="source.dir" value="${src.dir}"/>-->
+        <!--        <echo message="Building from: ${source.dir}"/>-->
         <copy todir="${build.dir}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -80,7 +80,7 @@
     </target>
 
     <target name="alt">
-<!--        НЕ ДОДЕЛАНО!!! НУЖНО ЕЩЕ СОБИРАТЬ JAR, Я НЕ ПОНИМАЮ КАК. ПЛЮС РЕАЛИЗАЦИЯ ВИДИМО НЕПРАВИЛЬНАЯ-->
+        <!--        НЕ ДОДЕЛАНО!!! НУЖНО ЕЩЕ СОБИРАТЬ JAR, Я НЕ ПОНИМАЮ КАК. ПЛЮС РЕАЛИЗАЦИЯ ВИДИМО НЕПРАВИЛЬНАЯ-->
         <delete dir="${alt.dir}"/>
         <property file="${replacements.file}"/>
         <copy todir="${alt.dir}">
@@ -140,7 +140,7 @@
 
         <java classname="Replacer" fork="true" dir="${alt.dir}" failonerror="true">
             <classpath path="${alt.dir}"/>
-<!--            <redirector outputproperty="replacer.output" alwayslog="true"/>-->
+            <!--            <redirector outputproperty="replacer.output" alwayslog="true"/>-->
         </java>
 
         <delete file="${alt.dir}/Replacer.java"/>
@@ -156,19 +156,30 @@
         <pathelement path="${test.classes.dir}"/> <!-- Для зависимостей между тестами -->
     </path>
 
-<!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4
-потому что как обычно новая версия не робит-->
+    <!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4
+    потому что как обычно новая версия не робит-->
     <target name="test" depends="build">
         <mkdir dir="${test.classes.dir}"/>
-        <mkdir dir="${test.reports.dir}"/>
-        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="test.classpath" includeantruntime="false"/>
+        <mkdir dir="${test.reports.dir}/raw"/>
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="test.classpath"
+               includeantruntime="false"/>
         <junit printsummary="yes" haltonfailure="no">
             <classpath refid="test.classpath"/>
             <formatter type="xml"/>
-            <batchtest todir="${test.reports.dir}">
+            <batchtest todir="${test.reports.dir}/raw">
                 <fileset dir="${test.dir}" includes="**/*Test.java"/>
             </batchtest>
         </junit>
+
+        <antcall target="report"/>
+    </target>
+
+    <target name="report">
+        <!-- Объединяем все XML-отчёты в один -->
+        <junitreport todir="${test.reports.dir}">
+            <fileset dir="${test.reports.dir}/raw" includes="TEST-*.xml"/>
+            <report format="noframes" todir="${test.reports.dir}"/>
+        </junitreport>
     </target>
 
 </project>
