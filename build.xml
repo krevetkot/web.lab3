@@ -16,6 +16,8 @@
 
 
     <target name="build" depends="compile">
+<!--        <property name="source.dir" value="${src.dir}"/>-->
+<!--        <echo message="Building from: ${source.dir}"/>-->
         <copy todir="${build.dir}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -78,6 +80,7 @@
     </target>
 
     <target name="alt">
+<!--        НЕ ДОДЕЛАНО!!! НУЖНО ЕЩЕ СОБИРАТЬ JAR, Я НЕ ПОНИМАЮ КАК. ПЛЮС РЕАЛИЗАЦИЯ ВИДИМО НЕПРАВИЛЬНАЯ-->
         <delete dir="${alt.dir}"/>
         <property file="${replacements.file}"/>
         <copy todir="${alt.dir}">
@@ -88,46 +91,47 @@
 
         <!-- Генерируем Java-класс для замен -->
         <echo file="${alt.dir}/Replacer.java"><![CDATA[
-import java.nio.file.*;
-import java.util.*;
-import java.io.*;
+        import java.nio.file.*;
+        import java.util.*;
+        import java.io.*;
 
-public class Replacer {
-    public static void main(String[] args) throws Exception {
-        System.out.println("[DEBUG] Replacement process started");
-        // Загрузка замен
-        Map<String,String> replaces = new HashMap<>();
-        try (InputStream is = new FileInputStream("${replacements.file}")) {
-            Properties props = new Properties();
-            props.load(is);
-            props.forEach((k,v) -> replaces.put((String)k, (String)v));
-            System.out.println("[DEBUG] Loaded replacements: " + replaces);
-        }
-
-        // Обработка файлов
-        Files.walk(Paths.get("./"))
-            .filter(p -> p.toString().endsWith(".java") && !p.toString().contains("Replacer.java"))
-            .forEach(p -> {
-                try {
-                    String originalContent = new String(Files.readAllBytes(p));
-                    String modifiedContent = originalContent;
-
-                    for (Map.Entry<String,String> e : replaces.entrySet()) {
-                        modifiedContent = modifiedContent.replace(e.getKey(), e.getValue());
-                    }
-
-                    if (!originalContent.equals(modifiedContent)) {
-                        Files.write(p, modifiedContent.getBytes());
-                    }
-                } catch (Exception e) {
-                    System.err.println("[ERROR] In file: " + p);
-                    e.printStackTrace();
+        public class Replacer {
+            public static void main(String[] args) throws Exception {
+                System.out.println("[DEBUG] Replacement process started");
+                // Загрузка замен
+                Map<String,String> replaces = new HashMap<>();
+                try (InputStream is = new FileInputStream("${replacements.file}")) {
+                    Properties props = new Properties();
+                    props.load(is);
+                    props.forEach((k,v) -> replaces.put((String)k, (String)v));
+                    System.out.println("[DEBUG] Loaded replacements: " + replaces);
                 }
-            });
-        System.out.println("[DEBUG] Replacement process completed");
-    }
-}
-]]></echo>
+
+                // Обработка файлов
+                Files.walk(Paths.get("./"))
+                    .filter(p -> p.toString().endsWith(".java") && !p.toString().contains("Replacer.java"))
+                    .forEach(p -> {
+                        try {
+                            String originalContent = new String(Files.readAllBytes(p));
+                            String modifiedContent = originalContent;
+
+                            for (Map.Entry<String,String> e : replaces.entrySet()) {
+                                modifiedContent = modifiedContent.replace(e.getKey(), e.getValue());
+                            }
+
+                            if (!originalContent.equals(modifiedContent)) {
+                                Files.write(p, modifiedContent.getBytes());
+                            }
+                        } catch (Exception e) {
+                            System.err.println("[ERROR] In file: " + p);
+                            e.printStackTrace();
+                        }
+                    });
+                System.out.println("[DEBUG] Replacement process completed");
+            }
+        }
+        ]]>
+        </echo>
 
         <javac srcdir="${alt.dir}" includes="Replacer.java"
                includeantruntime="false" debug="true" verbose="true">
@@ -139,7 +143,32 @@ public class Replacer {
 <!--            <redirector outputproperty="replacer.output" alwayslog="true"/>-->
         </java>
 
+        <delete file="${alt.dir}/Replacer.java"/>
+        <delete file="${alt.dir}/Replacer.class"/>
+    </target>
 
+    <path id="test.classpath">
+        <path refid="classpath"/>
+        <pathelement location="${lib.dir}/junit*.jar"/>
+        <pathelement location="${lib.dir}/hamcrest*.jar"/>
+        <pathelement location="${lib.dir}/opentest*.jar"/>
+        <pathelement location="${classes.dir}"/>
+        <pathelement path="${test.classes.dir}"/> <!-- Для зависимостей между тестами -->
+    </path>
+
+<!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4
+потому что как обычно новая версия не робит-->
+    <target name="test" depends="build">
+        <mkdir dir="${test.classes.dir}"/>
+        <mkdir dir="${test.reports.dir}"/>
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="test.classpath" includeantruntime="false"/>
+        <junit printsummary="yes" haltonfailure="no">
+            <classpath refid="test.classpath"/>
+            <formatter type="xml"/>
+            <batchtest todir="${test.reports.dir}">
+                <fileset dir="${test.dir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
     </target>
 
 </project>
