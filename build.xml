@@ -79,6 +79,19 @@
                       includes="**/*.properties"/>
     </target>
 
+    <!-- Подключаем ant-contrib -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
     <target name="alt">
         <!--        НЕ ДОДЕЛАНО!!! НУЖНО ЕЩЕ СОБИРАТЬ JAR, Я НЕ ПОНИМАЮ КАК. ПЛЮС РЕАЛИЗАЦИЯ ВИДИМО НЕПРАВИЛЬНАЯ-->
         <delete dir="${alt.dir}"/>
@@ -87,65 +100,35 @@
             <fileset dir="${src.dir}"/>
         </copy>
 
-        <!--        <apply-replacements target.dir="${alt.dir}"/>-->
+        <for list="${replacements}" param="key" delimiter=",">
+            <sequential>
+                <echo>Заменяем @{key} → ${@{key}}</echo>
+                <replaceregexp byline="true">
+                    <fileset dir="${alt.dir}" includes="**/*.java"/>
+                    <regexp pattern="@{key}"/>
+                    <substitution expression="${@{key}}"/>
+                </replaceregexp>
+            </sequential>
+        </for>
 
-        <!-- Генерируем Java-класс для замен -->
-        <echo file="${alt.dir}/Replacer.java"><![CDATA[
-        import java.nio.file.*;
-        import java.util.*;
-        import java.io.*;
+        <!-- Переименовываем названия файлов -->
+        <for list="${replacements}" param="key" delimiter=",">
+            <sequential>
+                <pathconvert property="files.to.rename" pathsep=",">
+                    <fileset dir="${alt.dir}" includes="**/*@{key}*.java"/>
+                    <mapper type="regexp" from="^(.*)@{key}(.*)$$" to="\1${@{key}}\2"/>
+                </pathconvert>
 
-        public class Replacer {
-            public static void main(String[] args) throws Exception {
-                System.out.println("[DEBUG] Replacement process started");
-                // Загрузка замен
-                Map<String,String> replaces = new HashMap<>();
-                try (InputStream is = new FileInputStream("${replacements.file}")) {
-                    Properties props = new Properties();
-                    props.load(is);
-                    props.forEach((k,v) -> replaces.put((String)k, (String)v));
-                    System.out.println("[DEBUG] Loaded replacements: " + replaces);
-                }
-
-                // Обработка файлов
-                Files.walk(Paths.get("./"))
-                    .filter(p -> p.toString().endsWith(".java") && !p.toString().contains("Replacer.java"))
-                    .forEach(p -> {
-                        try {
-                            String originalContent = new String(Files.readAllBytes(p));
-                            String modifiedContent = originalContent;
-
-                            for (Map.Entry<String,String> e : replaces.entrySet()) {
-                                modifiedContent = modifiedContent.replace(e.getKey(), e.getValue());
-                            }
-
-                            if (!originalContent.equals(modifiedContent)) {
-                                Files.write(p, modifiedContent.getBytes());
-                            }
-                        } catch (Exception e) {
-                            System.err.println("[ERROR] In file: " + p);
-                            e.printStackTrace();
-                        }
-                    });
-                System.out.println("[DEBUG] Replacement process completed");
-            }
-        }
-        ]]>
-        </echo>
-
-        <javac srcdir="${alt.dir}" includes="Replacer.java"
-               includeantruntime="false" debug="true" verbose="true">
-            <compilerarg value="-Xlint:all"/>
-        </javac>
-
-        <java classname="Replacer" fork="true" dir="${alt.dir}" failonerror="true">
-            <classpath path="${alt.dir}"/>
-            <!--            <redirector outputproperty="replacer.output" alwayslog="true"/>-->
-        </java>
-
-        <delete file="${alt.dir}/Replacer.java"/>
-        <delete file="${alt.dir}/Replacer.class"/>
+                <move todir="${alt.dir}">
+                    <fileset dir="${alt.dir}" includes="**/*@{key}*.java"/>
+                    <mapper type="regexp" from="^(.*)@{key}(.*)$$" to="\1${@{key}}\2"/>
+                </move>
+            </sequential>
+        </for>
     </target>
+
+
+
 
     <path id="test.classpath">
         <path refid="classpath"/>
