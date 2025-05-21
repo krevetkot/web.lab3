@@ -137,7 +137,7 @@
 
 
     <target name="team">
-        <!-- Получаем текущий коммит -->
+        <!-- Сохраняем текущий коммит -->
         <exec executable="git" outputproperty="git.head" failonerror="true">
             <arg value="rev-parse"/>
             <arg value="HEAD"/>
@@ -171,11 +171,13 @@
         <delete dir="${build.dir}" failonerror="false"/> -->
 
         <!-- Вызываем сборку -->
-        <antcall target="build"/>
+        <antcall target="build">
+            <param name="name" value="rev1"/>
+        </antcall>
 
-        <!-- Копируем jar в отдельную папку с именем ревизии -->
-        <mkdir dir="${build.dir}/jars/${git.rev1}"/>
-        <copy file="${build.dir}/${ant.project.name}.war" todir="${build.dir}/jars/${git.rev1}"/>
+
+        <mkdir dir="jars"/>
+        <copy file="${build.dir}/rev1.jar" todir="jars"/>
 
         <!-- Сборка для второй ревизии -->
         <echo>Сборка для ревизии: ${git.rev2}</echo>
@@ -184,17 +186,16 @@
             <arg value="${git.rev2}"/>
         </exec>
 
-        <delete dir="${build.dir}" failonerror="false"/>
-        <antcall target="build"/>
+        <antcall target="build">
+            <param name="name" value="rev2"/>
+        </antcall>
 
-        <mkdir dir="${build.dir}/jars/${git.rev2}"/>
-        <copy file="${build.dir}/${ant.project.name}.war" todir="${build.dir}/jars/${git.rev2}"/>
+
+        <copy file="${build.dir}/rev2.jar" todir="jars"/>
 
         <!-- Упаковываем оба jar в zip -->
         <zip destfile="${build.dir}/team-jars.zip">
-            <fileset dir="${build.dir}/jars">
-                <include name="**/*.jar"/>
-            </fileset>
+            <fileset dir="jars"/>
         </zip>
 
         <!-- Возвращаемся к исходному коммиту -->
