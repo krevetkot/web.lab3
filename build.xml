@@ -150,13 +150,14 @@
         </exec>
         <echo>Ревизия 1: ${git.rev1}</echo>
 
+        <!-- Создаём папку для сохранения jar -->
+        <mkdir dir="${ant.dir}/jars"/>
+
         <exec executable="git" outputproperty="git.rev2" failonerror="true">
             <arg value="rev-parse"/>
             <arg value="HEAD~2"/>
         </exec>
         <echo>Ревизия 2: ${git.rev2}</echo>
-
-
 
         <!-- Сборка для первой ревизии -->
         <echo>Сборка для ревизии: ${git.rev1}</echo>
@@ -165,14 +166,13 @@
             <arg value="${git.rev1}"/>
         </exec>
 
-        <!-- Создаём папку для сохранения jar -->
-        <mkdir dir="jars"/>
+
         <!-- Вызываем сборку -->
         <antcall target="build">
             <param name="name" value="rev1"/>
         </antcall>
 
-        <copy file="${build.dir}/rev1.jar" todir="jars"/>
+        <copy file="${build.dir}/rev1.jar" todir="${ant.dir}/jars"/>
 
         <!-- Сборка для второй ревизии -->
         <echo>Сборка для ревизии: ${git.rev2}</echo>
@@ -185,11 +185,11 @@
             <param name="name" value="rev2"/>
         </antcall>
 
-        <copy file="${build.dir}/rev2.jar" todir="jars"/>
+        <copy file="${build.dir}/rev2.jar" todir="${ant.dir}/jars"/>
 
         <!-- Упаковываем оба jar в zip -->
         <zip destfile="${build.dir}/team-jars.zip">
-            <fileset dir="jars"/>
+            <fileset dir="${ant.dir}/jars"/>
         </zip>
 
         <!-- Возвращаемся к исходному коммиту -->
