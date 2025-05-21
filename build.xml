@@ -39,8 +39,7 @@
 
 
     <target name="build" depends="compile">
-        <!--        <property name="source.dir" value="${src.dir}"/>-->
-        <!--        <echo message="Building from: ${source.dir}"/>-->
+        <property name="name" value="${ant.project.name}"/>
         <copy todir="${build.dir}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -51,7 +50,7 @@
             <fileset dir="${resources.dir}"/>
         </copy>
 
-        <jar destfile="${build.dir}/${ant.project.name}.jar">
+        <jar destfile="${build.dir}/${name}.jar">
             <fileset dir="${classes.dir}"/>
             <manifest>
                 <attribute name="Created-By" value="krevetkot &amp; darb0ga"/>
@@ -157,8 +156,7 @@
         </exec>
         <echo>Ревизия 2: ${git.rev2}</echo>
 
-        <!-- Создаём папку для сохранения jar -->
-        <mkdir dir="${build.dir}/jars"/>
+
 
         <!-- Сборка для первой ревизии -->
         <echo>Сборка для ревизии: ${git.rev1}</echo>
@@ -167,16 +165,13 @@
             <arg value="${git.rev1}"/>
         </exec>
 
-        <!-- Очищаем build (по необходимости)ф
-        <delete dir="${build.dir}" failonerror="false"/> -->
-
+        <!-- Создаём папку для сохранения jar -->
+        <mkdir dir="jars"/>
         <!-- Вызываем сборку -->
         <antcall target="build">
             <param name="name" value="rev1"/>
         </antcall>
 
-
-        <mkdir dir="jars"/>
         <copy file="${build.dir}/rev1.jar" todir="jars"/>
 
         <!-- Сборка для второй ревизии -->
@@ -189,7 +184,6 @@
         <antcall target="build">
             <param name="name" value="rev2"/>
         </antcall>
-
 
         <copy file="${build.dir}/rev2.jar" todir="jars"/>
 
