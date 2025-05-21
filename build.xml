@@ -160,7 +160,7 @@
 
 
     <target name="history">
-<!--        Current rev-->
+        <!--        Текущая ревизия-->
         <exec executable="svn" outputproperty="current.revision">
             <arg value="info"/>
             <arg value="--show-item"/>
@@ -225,7 +225,7 @@
 
         <for list="${replacements}" param="key" delimiter=",">
             <sequential>
-                <echo>Заменяем @{key} → ${@{key}}</echo>
+                <echo>Заменяем @{key} на ${@{key}}</echo>
                 <replaceregexp byline="true">
                     <fileset dir="${alt.dir}" includes="**/*.java"/>
                     <regexp pattern="@{key}"/>
@@ -373,6 +373,8 @@
             <arg value="checkout"/>
             <arg value="${git.head}"/>
         </exec>
+
+        <delete dir="${ant.dir}/jars"/>
     </target>
 
 
