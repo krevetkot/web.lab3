@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite errors="0" failures="0" hostname="LAPTOP-NUPSC590" id="0" name="ValidatorTest" package="" skipped="0" tests="1" time="0.066" timestamp="2025-05-21T20:45:43">
+      <properties>
+          <property name="ant.library.dir" value="C:\Program Files\Apache Ant\apache-ant-1.10.15\lib" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="java.dir" value="./src/main/java" />
+
+          <property name="java.specification.version" value="21" />
+
+          <property name="scp.port" value="2222" />
+
+          <property name="ant.project.name" value="web.lab3" />
+
+          <property name="sun.cpu.isalist" value="amd64" />
+
+          <property name="build.dir.web.xml" value="ant/build/WEB-INF/web.xml" />
+
+          <property name="sun.jnu.encoding" value="Cp1251" />
+
+          <property name="scp.server" value="se.ifmo.ru" />
+
+          <property name="java.class.path" value="C:\Program Files\Apache Ant\apache-ant-1.10.15\bin\..\lib\ant-launcher.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-antlr.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-apache-bcel.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-apache-bsf.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-apache-log4j.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-apache-oro.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-apache-regexp.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-apache-resolver.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-apache-xalan2.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-commons-logging.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-commons-net.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-imageio.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-jai.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-jakartamail.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-javamail.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-jdepend.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-jmf.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-jsch.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-junit.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-junit4.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-junitlauncher.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-launcher.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-netrexx.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-swing.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-testutil.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant-xz.jar;C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant.jar" />
+
+          <property name="replacements.file" value="C:/Users/User/java_workspace/4sem/opi_web.lab3_old/src/main/resources/replacements/replacements.properties" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="native2ascii.resources" value="./src/main/resources/native2ascii" />
+
+          <property name="ant.file.web.lab3" value="C:\Users\User\java_workspace\4sem\opi_web.lab3_old\build.xml" />
+
+          <property name="user.variant" value="" />
+
+          <property name="java.vendor.url" value="https://java.oracle.com/" />
+
+          <property name="resources.dir" value="./src/main/resources" />
+
+          <property name="java.vm.specification.version" value="21" />
+
+          <property name="os.name" value="Windows 10" />
+
+          <property name="scp.password" value="UsYo*0636" />
+
+          <property name="webapp.dir" value="./src/main/webapp" />
+
+          <property name="user.country" value="RU" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.boot.library.path" value="C:\Users\User\.jdks\openjdk-21.0.1\bin" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.launch.Launcher test" />
+
+          <property name="test.classes.dir" value="ant/build/test/classes" />
+
+          <property name="scp.dir" value="wildfly/wildfly-33.0.1.Final/standalone/deployments" />
+
+          <property name="jdk.debug" value="release" />
+
+          <property name="test.dir" value="./src/test/java" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="user.home" value="C:\Users\User" />
+
+          <property name="user.language" value="ru" />
+
+          <property name="compile.version" value="1.8" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.version.date" value="2023-10-17" />
+
+          <property name="java.home" value="C:\Users\User\.jdks\openjdk-21.0.1" />
+
+          <property name="basedir" value="C:\Users\User\java_workspace\4sem\opi_web.lab3_old" />
+
+          <property name="file.separator" value="\" />
+
+          <property name="java.vm.compressedOopsMode" value="Zero based" />
+
+          <property name="line.separator" value="&#xd;&#xa;" />
+
+          <property name="ant.java.version" value="21" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="doc.dir" value="doc" />
+
+          <property name="name" value="web.lab3" />
+
+          <property name="user.script" value="" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="java.runtime.version" value="21.0.1+12-29" />
+
+          <property name="alt.dir" value="alt_src" />
+
+          <property name="user.name" value="User" />
+
+          <property name="ant.file" value="C:\Users\User\java_workspace\4sem\opi_web.lab3_old\build.xml" />
+
+          <property name="stdout.encoding" value="cp866" />
+
+          <property name="path.separator" value=";" />
+
+          <property name="params.file" value="./src/main/resources/params.props" />
+
+          <property name="os.version" value="10.0" />
+
+          <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="ant.project.invoked-targets" value="test" />
+
+          <property name="scp.user" value="s409577" />
+
+          <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+
+          <property name="pscp.path" value="C:/Program Files/PuTTY/pscp.exe" />
+
+          <property name="test.reports.dir" value="ant/build/test/reports" />
+
+          <property name="build.dir" value="ant/build" />
+
+          <property name="ant.core.lib" value="C:\Program Files\Apache Ant\apache-ant-1.10.15\lib\ant.jar" />
+
+          <property name="vm.args" value="-Xmx512m -DmyApp.env=dev" />
+
+          <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/" />
+
+          <property name="java.io.tmpdir" value="C:\Users\User\AppData\Local\Temp\" />
+
+          <property name="java.version" value="21.0.1" />
+
+          <property name="user.dir" value="C:\Users\User\java_workspace\4sem\opi_web.lab3_old" />
+
+          <property name="os.arch" value="amd64" />
+
+          <property name="build.dir.lib" value="ant/build/WEB-INF/lib" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="ant.dir" value="ant" />
+
+          <property name="music.file" value="C:/Users/User/java_workspace/4sem/opi_web.lab3_old/music.wav" />
+
+          <property name="ant.home" value="C:\Program Files\Apache Ant\apache-ant-1.10.15\bin\.." />
+
+          <property name="lib.dir" value="lib" />
+
+          <property name="sun.os.patch.level" value="" />
+
+          <property name="ant.file.type.web.lab3" value="file" />
+
+          <property name="native.encoding" value="Cp1251" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.15 compiled on August 25 2024" />
+
+          <property name="java.library.path" value="C:\Users\User\.jdks\openjdk-21.0.1\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Users\User\apache-maven-3.9.6\bin;C:\Program Files\dotnet\;C:\Program Files (x86)\NetSarang\Xshell 8\;C:\Program Files (x86)\NetSarang\Xftp 8\;C:\Program Files\Go\bin;C:\Users\User\AppData\Local\fnm_multishells\17872_1733056095661;C:\Program Files\Git\cmd;C:\Program Files\TortoiseSVN\bin;C:\Program Files\SlikSvn\bin;C:\Program Files\WireGuard\;C:\Program Files\Docker\Docker\resources\bin;C:\Users\User\AppData\Local\Programs\Python\Launcher\;C:\Users\User\AppData\Local\Microsoft\WindowsApps;C:\Users\User\AppData\Local\GitHubDesktop\bin;C:\Users\User\.jdks\openjdk-21.0.1\bin;C:\Users\User\AppData\Local\Programs\MiKTeX\miktex\bin\x64\;C:\Users\User\apache-maven-3.9.6\bin;C:\Users\User\AppData\Local\Microsoft\WinGet\Packages\Schniz.fnm_Microsoft.Winget.Source_8wekyb3d8bbwe;C:\Users\User\go\bin;C:\Users\User\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\Apache Ant\apache-ant-1.10.15\bin;;." />
+
+          <property name="stderr.encoding" value="cp866" />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.info" value="mixed mode, sharing" />
+
+          <property name="java.vm.version" value="21.0.1+12-29" />
+
+          <property name="classes.dir" value="ant/build/WEB-INF/classes" />
+
+          <property name="package_name" value="labs" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+
+          <property name="java.class.version" value="65.0" />
+
+          <property name="src.dir" value="./src" />
+
+          <property name="ant.project.default-target" value="build" />
+
+      </properties>
+
+      <testcase classname="ValidatorTest" name="testHitInArea" time="0.004" />
+
+      <system-out><![CDATA[]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+</testsuites>
