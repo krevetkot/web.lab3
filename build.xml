@@ -85,7 +85,6 @@
     </target>
 
     <target name="doc">
-
         <mkdir dir="${build.dir}/javadoc"/>
         <javadoc sourcepath="${java.dir}" destdir="${build.dir}/javadoc" classpathref="classpath">
             <doctitle>${ant.project.name} API Documentation</doctitle>
@@ -309,5 +308,63 @@
             <arg value="push"/>
         </exec>
     </target>
+
+
+    <target name="diff">
+        <loadfile property="params" srcFile="${params.file}"/>
+
+        <exec executable="svn" outputproperty="all.differences">
+            <arg value="st"/>
+        </exec>
+
+        <property name="commit.flag" value="false"/>
+
+        <!-- оставляем только изменения не из params.props -->
+        <script language="javascript"><![CDATA[
+        var allDiffs = project.getProperty("all.differences").split("\n");
+        var excludedPaths = project.getProperty("params").split("\n");
+        var needCommit = false;
+
+        for (var i = 0; i < allDiffs.length; i++) {
+            var line = allDiffs[i].trim();
+            if (line.length === 0 || line.startsWith("?")) continue;
+
+            var file = line.substring(1).trim().split(" ")[0];
+            var isExcluded = false;
+
+            // Проверяем, есть ли файл в исключениях
+            for (var j = 0; j < excludedPaths.length; j++) {
+                if (file.startsWith(excludedPaths[j].trim())) {
+                    isExcluded = true;
+                    break;
+                }
+            }
+
+            if (!isExcluded) {
+                needCommit = true;
+                break;
+            }
+        }
+
+        project.setProperty("commit.flag", needCommit);
+    ]]></script>
+
+        <!-- Коммитим, если есть НЕисключенные изменения -->
+        <if>
+            <equals arg1="${commit.flag}" arg2="true"/>
+            <then>
+                <exec executable="svn">
+                    <arg value="commit"/>
+                    <arg value="-m"/>
+                    <arg value="commit from diff"/>
+                </exec>
+                <echo>Committed changes outside excluded paths.</echo>
+            </then>
+            <else>
+                <echo>No changes outside excluded paths. Skip commit.</echo>
+            </else>
+        </if>
+    </target>
+
 
 </project>
