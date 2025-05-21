@@ -37,3 +37,13 @@ target/
 
 ### Mac OS ###
 .DS_Store
+
+### svn ###
+/conf
+/db
+/hooks
+/locks
+Desktop.ini
+format
+README.txt
+svn.ico

@@ -40,7 +40,6 @@
 
     <target name="build" depends="compile">
         <property name="name" value="${ant.project.name}"/>
-        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${name}</echo>
         <copy todir="${build.dir}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -108,7 +107,6 @@
         <jar destfile="${build.dir}/${ant.project.name}-doc.jar"
              basedir="${build.dir}/javadoc"
              manifest="${build.dir}/META-INF/MANIFEST.MF"/>
-
     </target>
 
     <target name="history">
@@ -308,44 +306,29 @@
 
     <target name="diff">
         <loadfile property="params" srcFile="${params.file}"/>
-
         <exec executable="svn" outputproperty="all.differences">
             <arg value="st"/>
         </exec>
 
-        <property name="commit.flag" value="false"/>
+        <!-- Фильтруем строки через <filterchain> -->
+        <loadresource property="filtered.diffs">
+            <string value="${all.differences}"/>
+            <filterchain>
+                <linecontainsregexp negate="true">
+                    <regexp pattern="^(\?|${params})"/>
+                </linecontainsregexp>
+            </filterchain>
+        </loadresource>
 
-        <!-- оставляем только изменения не из params.props -->
-        <script language="javascript"><![CDATA[
-        var allDiffs = project.getProperty("all.differences").split("\n");
-        var excludedPaths = project.getProperty("params").split("\n");
-        var needCommit = false;
+        <echo>
+            DIFFS: ${filtered.diffs}
+        </echo>
 
-        for (var i = 0; i < allDiffs.length; i++) {
-            var line = allDiffs[i].trim();
-            if (line.length === 0 || line.startsWith("?")) continue;
+        <!-- Устанавливаем флаг, если есть изменения -->
+        <condition property="commit.flag" value="true">
+            <length string="@{filtered.diffs}" length="0" when="greater"/>
+        </condition>
 
-            var file = line.substring(1).trim().split(" ")[0];
-            var isExcluded = false;
-
-            // Проверяем, есть ли файл в исключениях
-            for (var j = 0; j < excludedPaths.length; j++) {
-                if (file.startsWith(excludedPaths[j].trim())) {
-                    isExcluded = true;
-                    break;
-                }
-            }
-
-            if (!isExcluded) {
-                needCommit = true;
-                break;
-            }
-        }
-
-        project.setProperty("commit.flag", needCommit);
-    ]]></script>
-
-        <!-- Коммитим, если есть НЕисключенные изменения -->
         <if>
             <equals arg1="${commit.flag}" arg2="true"/>
             <then>
@@ -354,10 +337,9 @@
                     <arg value="-m"/>
                     <arg value="commit from diff"/>
                 </exec>
-                <echo>Committed changes outside excluded paths.</echo>
             </then>
             <else>
-                <echo>No changes outside excluded paths. Skip commit.</echo>
+                <echo>No changes outside excluded paths.</echo>
             </else>
         </if>
     </target>
