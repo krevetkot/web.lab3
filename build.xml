@@ -28,7 +28,7 @@
         <pathelement location="${lib.dir}/hamcrest*.jar"/>
         <pathelement location="${lib.dir}/opentest*.jar"/>
         <pathelement location="${classes.dir}"/>
-        <pathelement path="${test.classes.dir}"/> <!-- Для зависимостей между тестами -->
+        <pathelement path="${test.classes.dir}"/>
     </path>
 
 
@@ -77,11 +77,51 @@
         <delete dir="${build.dir}"/>
     </target>
 
+
+    <!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4
+    потому что как обычно новая версия не робит-->
+    <target name="test" depends="build">
+        <mkdir dir="${test.classes.dir}"/>
+        <mkdir dir="${test.reports.dir}/raw"/>
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="test.classpath"
+               includeantruntime="false"/>
+        <junit printsummary="yes" haltonfailure="no">
+            <classpath refid="test.classpath"/>
+            <formatter type="xml"/>
+            <batchtest todir="${test.reports.dir}/raw">
+                <fileset dir="${test.dir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+        <antcall target="report"/>
+    </target>
+
+
+    <target name="scp">
+        <exec executable="${pscp.path}" failonerror="true">
+            <arg value="-P"/>
+            <arg value="2222"/>
+            <arg value="-pw"/>
+            <arg value="${scp.password}"/>
+            <arg value="${build.dir}/${ant.project.name}.war"/>
+            <arg value="${scp.user}@${scp.server}:${scp.dir}"/>
+        </exec>
+    </target>
+
+
     <target name="xml">
         <xmlvalidate lenient="yes" failonerror="true">
             <fileset dir="${src.dir}" includes="**/*.xml"/>
         </xmlvalidate>
     </target>
+
+
+    <target name="music">
+        <exec executable="powershell" spawn="true">
+            <arg value="-c"/>
+            <arg value="(New-Object Media.SoundPlayer '${music.file}').PlaySync();"/>
+        </exec>
+    </target>
+
 
     <target name="doc">
         <mkdir dir="${build.dir}/javadoc"/>
@@ -100,123 +140,14 @@
 
         <mkdir dir="${build.dir}/META-INF"/>
         <manifest file="${build.dir}/META-INF/MANIFEST.MF">
-            <attribute name="Created-By" value="Apache Ant"/>
-            <attribute name="Built-By" value="${user.name}"/>
+            <attribute name="Created-By" value="krevetkot &amp; darb0ga"/>
+            <attribute name="Manifest-Version" value="1.0"/>
+            <attribute name="Main-Class" value="NoClass"/>
         </manifest>
 
         <jar destfile="${build.dir}/${ant.project.name}-doc.jar"
              basedir="${build.dir}/javadoc"
              manifest="${build.dir}/META-INF/MANIFEST.MF"/>
-    </target>
-
-    <target name="history">
-
-    </target>
-
-
-    <target name="env">
-        <property file="build.properties"/>
-
-        <mkdir dir="${classes.dir}"/>
-
-        <javac srcdir="${java.dir}" destdir="${classes.dir}"
-               classpathref="classpath" source="${compile.version}" includeantruntime="false">
-            <!-- includeantruntime ="false" — не включать jar самого Ant в classpath. -->
-            <compilerarg line="${vm.args}"/>
-        </javac>
-
-        <copy todir="${classes.dir}">
-            <fileset dir="${resources.dir}"/>
-        </copy>
-
-        <!-- Собираем war -->
-        <antcall target="build"/>
-    </target>
-
-
-    <target name="team">
-        <!-- Сохраняем текущий коммит -->
-        <exec executable="git" outputproperty="git.head" failonerror="true">
-            <arg value="rev-parse"/>
-            <arg value="HEAD"/>
-        </exec>
-        <echo>Текущий коммит: ${git.head}</echo>
-
-        <!-- Получаем 2 предыдущих ревизии -->
-        <exec executable="git" outputproperty="git.rev1" failonerror="true">
-            <arg value="rev-parse"/>
-            <arg value="HEAD~1"/>
-        </exec>
-        <echo>Ревизия 1: ${git.rev1}</echo>
-
-        <!-- Создаём папку для сохранения jar -->
-        <mkdir dir="${ant.dir}/jars"/>
-
-        <exec executable="git" outputproperty="git.rev2" failonerror="true">
-            <arg value="rev-parse"/>
-            <arg value="HEAD~2"/>
-        </exec>
-        <echo>Ревизия 2: ${git.rev2}</echo>
-
-        <!-- Сборка для первой ревизии -->
-        <echo>Сборка для ревизии: ${git.rev1}</echo>
-        <exec executable="git" failonerror="true">
-            <arg value="checkout"/>
-            <arg value="${git.rev1}"/>
-        </exec>
-
-
-        <!-- Вызываем сборку -->
-        <antcall target="build">
-            <param name="name" value="rev1"/>
-        </antcall>
-
-        <copy file="${build.dir}/rev1.jar" todir="${ant.dir}/jars"/>
-
-        <!-- Сборка для второй ревизии -->
-        <echo>Сборка для ревизии: ${git.rev2}</echo>
-        <exec executable="git" failonerror="true">
-            <arg value="checkout"/>
-            <arg value="${git.rev2}"/>
-        </exec>
-
-        <antcall target="build">
-            <param name="name" value="rev2"/>
-        </antcall>
-
-        <copy file="${build.dir}/rev2.jar" todir="${ant.dir}/jars"/>
-
-        <!-- Упаковываем оба jar в zip -->
-        <zip destfile="${build.dir}/team-jars.zip">
-            <fileset dir="${ant.dir}/jars"/>
-        </zip>
-
-        <!-- Возвращаемся к исходному коммиту -->
-        <echo>Возвращаемся на исходный коммит ${git.head}</echo>
-        <exec executable="git" failonerror="true">
-            <arg value="checkout"/>
-            <arg value="${git.head}"/>
-        </exec>
-    </target>
-
-
-    <target name="scp">
-        <exec executable="${pscp.path}" failonerror="true">
-            <arg value="-P"/>
-            <arg value="2222"/>
-            <arg value="-pw"/>
-            <arg value="${scp.password}"/>
-            <arg value="${build.dir}/${ant.project.name}.war"/>
-            <arg value="${scp.user}@${scp.server}:${scp.dir}"/>
-        </exec>
-    </target>
-
-
-    <target name="music">
-        <exec executable="powershell" spawn="true">
-            <arg value="-c"/>
-            <arg value="(New-Object Media.SoundPlayer '${music.file}').PlaySync();"/>
-        </exec>
     </target>
 
 
@@ -225,6 +156,63 @@
         <native2ascii src="${resources.dir}"
                       dest="${native2ascii.resources}"
                       includes="**/*.properties"/>
+    </target>
+
+
+    <target name="history">
+<!--        Current rev-->
+        <exec executable="svn" outputproperty="current.revision">
+            <arg value="info"/>
+            <arg value="--show-item"/>
+            <arg value="revision"/>
+        </exec>
+
+        <trycatch>
+            <try>
+                <antcall target="compile"/>
+            </try>
+            <catch>
+                <mkdir dir="diff"/>
+
+                <for param="i" begin="${current.revision}" end="1" step="-1">
+                    <sequential>
+                        <echo>Revision @{i}</echo>
+
+                        <exec executable="svn">
+                            <arg value="update"/>
+                            <arg value="-r"/>
+                            <arg value="@{i}"/>
+                            <arg value="--accept"/>
+                            <arg value="theirs-full"/>
+                        </exec>
+
+                        <trycatch>
+                            <try>
+                                <antcall target="compile"/>
+                                <echo>Working revision: @{i}</echo>
+
+                                <!-- Создаем diff между этой и следующей ревизией -->
+                                <math result="next.revision" operand1="@{i}" operation="+" operand2="1" datatype="int"/>
+                                <exec executable="svn">
+                                    <arg value="diff"/>
+                                    <arg value="-r"/>
+                                    <arg value="@{i}:@{next.revision}"/>
+                                    <arg value="--summarize"/>
+                                    <redirector output="diff/diff_@{next.revision}.txt"/>
+                                </exec>
+
+                                <property name="found.revision" value="@{i}"/>
+                                <fail message="Working revision: ${found.revision}"/>
+                            </try>
+                            <catch>
+                                <echo>Revision is not working. Continue... </echo>
+                            </catch>
+                        </trycatch>
+                    </sequential>
+                </for>
+                <echo>No working revision.</echo>
+            </catch>
+        </trycatch>
     </target>
 
 
@@ -263,21 +251,128 @@
     </target>
 
 
-    <!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4
-    потому что как обычно новая версия не робит-->
-    <target name="test" depends="build">
-        <mkdir dir="${test.classes.dir}"/>
-        <mkdir dir="${test.reports.dir}/raw"/>
-        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="test.classpath"
-               includeantruntime="false"/>
-        <junit printsummary="yes" haltonfailure="no">
-            <classpath refid="test.classpath"/>
-            <formatter type="xml"/>
-            <batchtest todir="${test.reports.dir}/raw">
-                <fileset dir="${test.dir}" includes="**/*Test.java"/>
-            </batchtest>
-        </junit>
-        <antcall target="report"/>
+    <target name="env">
+        <property file="build.properties"/>
+
+        <mkdir dir="${classes.dir}"/>
+
+        <javac srcdir="${java.dir}" destdir="${classes.dir}"
+               classpathref="classpath" source="${compile.version}" includeantruntime="false">
+            <!-- includeantruntime ="false" — не включать jar самого Ant в classpath. -->
+            <compilerarg line="${vm.args}"/>
+        </javac>
+
+        <copy todir="${classes.dir}">
+            <fileset dir="${resources.dir}"/>
+        </copy>
+
+        <antcall target="build"/>
+    </target>
+
+
+    <target name="diff">
+        <loadfile property="params" srcFile="${params.file}"/>
+        <exec executable="svn" outputproperty="all.differences">
+            <arg value="st"/>
+        </exec>
+
+        <!-- Фильтр строк -->
+        <loadresource property="filtered.diffs">
+            <string value="${all.differences}"/>
+            <filterchain>
+                <linecontainsregexp negate="true">
+                    <regexp pattern="^(\?|${params})"/>
+                </linecontainsregexp>
+            </filterchain>
+        </loadresource>
+
+        <echo>
+            DIFFS: ${filtered.diffs}
+        </echo>
+
+        <condition property="commit.flag" value="true">
+            <length string="@{filtered.diffs}" length="0" when="greater"/>
+        </condition>
+
+        <if>
+            <equals arg1="${commit.flag}" arg2="true"/>
+            <then>
+                <exec executable="svn">
+                    <arg value="commit"/>
+                    <arg value="-m"/>
+                    <arg value="commit from diff"/>
+                </exec>
+            </then>
+            <else>
+                <echo>No changes outside excluded paths.</echo>
+            </else>
+        </if>
+    </target>
+
+
+    <target name="team">
+        <!-- Сохраняем текущий коммит -->
+        <exec executable="git" outputproperty="git.head" failonerror="true">
+            <arg value="rev-parse"/>
+            <arg value="HEAD"/>
+        </exec>
+        <echo>Текущий коммит: ${git.head}</echo>
+
+        <!-- Получаем предыдущую ревизию -->
+        <exec executable="git" outputproperty="git.rev1" failonerror="true">
+            <arg value="rev-parse"/>
+            <arg value="HEAD~1"/>
+        </exec>
+        <echo>Ревизия 1: ${git.rev1}</echo>
+
+        <!-- Создаём папку для сохранения jar -->
+        <mkdir dir="${ant.dir}/jars"/>
+
+        <!-- Получаем еще одну предыдущую ревизию -->
+        <exec executable="git" outputproperty="git.rev2" failonerror="true">
+            <arg value="rev-parse"/>
+            <arg value="HEAD~2"/>
+        </exec>
+        <echo>Ревизия 2: ${git.rev2}</echo>
+
+        <!-- Сборка для первой ревизии -->
+        <echo>Сборка для ревизии: ${git.rev1}</echo>
+        <exec executable="git" failonerror="true">
+            <arg value="checkout"/>
+            <arg value="${git.rev1}"/>
+        </exec>
+
+        <!-- Вызываем сборку -->
+        <antcall target="build">
+            <param name="name" value="rev1"/>
+        </antcall>
+
+        <copy file="${build.dir}/rev1.jar" todir="${ant.dir}/jars"/>
+
+        <!-- Сборка для второй ревизии -->
+        <echo>Сборка для ревизии: ${git.rev2}</echo>
+        <exec executable="git" failonerror="true">
+            <arg value="checkout"/>
+            <arg value="${git.rev2}"/>
+        </exec>
+
+        <antcall target="build">
+            <param name="name" value="rev2"/>
+        </antcall>
+
+        <copy file="${build.dir}/rev2.jar" todir="${ant.dir}/jars"/>
+
+        <!-- Упаковываем оба jar в zip -->
+        <zip destfile="${build.dir}/team-jars.zip">
+            <fileset dir="${ant.dir}/jars"/>
+        </zip>
+
+        <!-- Возвращаемся к исходному коммиту -->
+        <echo>Возвращаемся на исходный коммит ${git.head}</echo>
+        <exec executable="git" failonerror="true">
+            <arg value="checkout"/>
+            <arg value="${git.head}"/>
+        </exec>
     </target>
 
 
@@ -302,47 +397,5 @@
             <arg value="push"/>
         </exec>
     </target>
-
-
-    <target name="diff">
-        <loadfile property="params" srcFile="${params.file}"/>
-        <exec executable="svn" outputproperty="all.differences">
-            <arg value="st"/>
-        </exec>
-
-        <!-- Фильтруем строки через <filterchain> -->
-        <loadresource property="filtered.diffs">
-            <string value="${all.differences}"/>
-            <filterchain>
-                <linecontainsregexp negate="true">
-                    <regexp pattern="^(\?|${params})"/>
-                </linecontainsregexp>
-            </filterchain>
-        </loadresource>
-
-        <echo>
-            DIFFS: ${filtered.diffs}
-        </echo>
-
-        <!-- Устанавливаем флаг, если есть изменения -->
-        <condition property="commit.flag" value="true">
-            <length string="@{filtered.diffs}" length="0" when="greater"/>
-        </condition>
-
-        <if>
-            <equals arg1="${commit.flag}" arg2="true"/>
-            <then>
-                <exec executable="svn">
-                    <arg value="commit"/>
-                    <arg value="-m"/>
-                    <arg value="commit from diff"/>
-                </exec>
-            </then>
-            <else>
-                <echo>No changes outside excluded paths.</echo>
-            </else>
-        </if>
-    </target>
-
 
 </project>
