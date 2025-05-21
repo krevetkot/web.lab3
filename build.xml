@@ -171,7 +171,7 @@
         <antcall target="build">
             <param name="name" value="rev1"/>
         </antcall>
-        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${rev1}</echo>
+        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${name}</echo>
 
         <copy file="${build.dir}/rev1.jar" todir="${ant.dir}/jars"/>
 
@@ -185,7 +185,7 @@
         <antcall target="build">
             <param name="name" value="rev2"/>
         </antcall>
-        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${rev2}</echo>
+        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${name}</echo>
 
         <copy file="${build.dir}/rev2.jar" todir="${ant.dir}/jars"/>
 
