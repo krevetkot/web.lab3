@@ -168,7 +168,7 @@
             <arg value="${git.rev1}"/>
         </exec>
 
-        <!-- Очищаем build (по необходимости)
+        <!-- Очищаем build (по необходимости)ф
         <delete dir="${build.dir}" failonerror="false"/> -->
 
         <!-- Вызываем сборку -->
@@ -176,7 +176,7 @@
 
         <!-- Копируем jar в отдельную папку с именем ревизии -->
         <mkdir dir="${build.dir}/jars/${git.rev1}"/>
-        <copy file="${build.dir}/${ant.project.name}.jar" todir="${build.dir}/jars/${git.rev1}"/>
+        <copy file="${build.dir}/${ant.project.name}.war" todir="${build.dir}/jars/${git.rev1}"/>
 
         <!-- Сборка для второй ревизии -->
         <echo>Сборка для ревизии: ${git.rev2}</echo>
@@ -189,7 +189,7 @@
         <antcall target="build"/>
 
         <mkdir dir="${build.dir}/jars/${git.rev2}"/>
-        <copy file="${build.dir}/${ant.project.name}.jar" todir="${build.dir}/jars/${git.rev2}"/>
+        <copy file="${build.dir}/${ant.project.name}.war" todir="${build.dir}/jars/${git.rev2}"/>
 
         <!-- Упаковываем оба jar в zip -->
         <zip destfile="${build.dir}/team-jars.zip">
