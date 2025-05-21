@@ -40,6 +40,7 @@
 
     <target name="build" depends="compile">
         <property name="name" value="${ant.project.name}"/>
+        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${name}</echo>
         <copy todir="${build.dir}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -171,7 +172,6 @@
         <antcall target="build">
             <param name="name" value="rev1"/>
         </antcall>
-        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${name}</echo>
 
         <copy file="${build.dir}/rev1.jar" todir="${ant.dir}/jars"/>
 
@@ -185,7 +185,6 @@
         <antcall target="build">
             <param name="name" value="rev2"/>
         </antcall>
-        <echo>ИМЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ: ${name}</echo>
 
         <copy file="${build.dir}/rev2.jar" todir="${ant.dir}/jars"/>
 
