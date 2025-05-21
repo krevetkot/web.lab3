@@ -8,6 +8,29 @@
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
 
+    <!-- Подключение ant-contrib -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${lib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <!-- Подключение junit -->
+    <path id="test.classpath">
+        <path refid="classpath"/>
+        <pathelement location="${lib.dir}/junit*.jar"/>
+        <pathelement location="${lib.dir}/hamcrest*.jar"/>
+        <pathelement location="${lib.dir}/opentest*.jar"/>
+        <pathelement location="${classes.dir}"/>
+        <pathelement path="${test.classes.dir}"/> <!-- Для зависимостей между тестами -->
+    </path>
+
 
     <target name="compile" depends="clean">
         <mkdir dir="${classes.dir}"/>
@@ -16,6 +39,8 @@
 
 
     <target name="build" depends="compile">
+        <!--        <property name="source.dir" value="${src.dir}"/>-->
+        <!--        <echo message="Building from: ${source.dir}"/>-->
         <copy todir="${build.dir}">
             <fileset dir="${webapp.dir}"/>
         </copy>
@@ -26,12 +51,26 @@
             <fileset dir="${resources.dir}"/>
         </copy>
 
+        <jar destfile="${build.dir}/${ant.project.name}.jar">
+            <fileset dir="${classes.dir}"/>
+            <manifest>
+                <attribute name="Created-By" value="krevetkot &amp; darb0ga"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+            </manifest>
+        </jar>
+
         <war destfile="${build.dir}/${ant.project.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
-            <fileset dir="${build.dir}">
-                <include name="**/*.*"/>
-            </fileset>
+            <fileset dir="${build.dir}"/>
+            <manifest>
+                <attribute name="Created-By" value="krevetkot &amp; darb0ga"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+            </manifest>
             <classes dir="${classes.dir}"/>
         </war>
+
+        <antcall target="music"/>
     </target>
 
 
@@ -167,5 +206,108 @@
         </exec>
     </target>
 
+
+    <target name="scp">
+        <exec executable="${pscp.path}" failonerror="true">
+            <arg value="-P"/>
+            <arg value="2222"/>
+            <arg value="-pw"/>
+            <arg value="${scp.password}"/>
+            <arg value="${build.dir}/${ant.project.name}.war"/>
+            <arg value="${scp.user}@${scp.server}:${scp.dir}"/>
+        </exec>
+    </target>
+
+
+    <target name="music">
+        <exec executable="powershell" spawn="true">
+            <arg value="-c"/>
+            <arg value="(New-Object Media.SoundPlayer '${music.file}').PlaySync();"/>
+        </exec>
+    </target>
+
+
+    <target name="native2ascii">
+        <delete dir="${native2ascii.resources}"/>
+        <native2ascii src="${resources.dir}"
+                      dest="${native2ascii.resources}"
+                      includes="**/*.properties"/>
+    </target>
+
+
+    <target name="alt">
+        <delete dir="${alt.dir}"/>
+        <property file="${replacements.file}"/>
+        <copy todir="${alt.dir}">
+            <fileset dir="${src.dir}"/>
+        </copy>
+
+        <for list="${replacements}" param="key" delimiter=",">
+            <sequential>
+                <echo>Заменяем @{key} → ${@{key}}</echo>
+                <replaceregexp byline="true">
+                    <fileset dir="${alt.dir}" includes="**/*.java"/>
+                    <regexp pattern="@{key}"/>
+                    <substitution expression="${@{key}}"/>
+                </replaceregexp>
+            </sequential>
+        </for>
+
+        <!-- Переименовываем названия файлов -->
+        <for list="${replacements}" param="key" delimiter=",">
+            <sequential>
+                <pathconvert property="files.to.rename" pathsep=",">
+                    <fileset dir="${alt.dir}" includes="**/*@{key}*.java"/>
+                    <mapper type="regexp" from="^(.*)@{key}(.*)$$" to="\1${@{key}}\2"/>
+                </pathconvert>
+
+                <move todir="${alt.dir}">
+                    <fileset dir="${alt.dir}" includes="**/*@{key}*.java"/>
+                    <mapper type="regexp" from="^(.*)@{key}(.*)$$" to="\1${@{key}}\2"/>
+                </move>
+            </sequential>
+        </for>
+    </target>
+
+
+    <!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4
+    потому что как обычно новая версия не робит-->
+    <target name="test" depends="build">
+        <mkdir dir="${test.classes.dir}"/>
+        <mkdir dir="${test.reports.dir}/raw"/>
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="test.classpath"
+               includeantruntime="false"/>
+        <junit printsummary="yes" haltonfailure="no">
+            <classpath refid="test.classpath"/>
+            <formatter type="xml"/>
+            <batchtest todir="${test.reports.dir}/raw">
+                <fileset dir="${test.dir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+        <antcall target="report"/>
+    </target>
+
+
+    <target name="report">
+        <!-- Объединяем отчёты в один -->
+        <junitreport todir="${test.reports.dir}">
+            <fileset dir="${test.reports.dir}/raw" includes="TEST-*.xml"/>
+            <report format="noframes" todir="${test.reports.dir}"/>
+        </junitreport>
+
+        <exec executable="git" failonerror="true">
+            <arg value="add"/>
+            <arg value="-f"/>
+            <arg value="${test.reports.dir}/TESTS-TestSuites.xml"/>
+        </exec>
+        <exec executable="git" failonerror="true">
+            <arg value="commit"/>
+            <arg value="-m"/>
+            <arg value="JUnit report"/>
+        </exec>
+        <exec executable="git" failonerror="true">
+            <arg value="push"/>
+        </exec>
+    </target>
 
 </project>
