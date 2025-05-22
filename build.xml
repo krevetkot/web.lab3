@@ -78,8 +78,7 @@
     </target>
 
 
-    <!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4
-    потому что как обычно новая версия не робит-->
+    <!--    ЕСЛИ ЧТО: ИСПОЛЬЗУЕТСЯ JUNIT4, потому что как обычно новая версия не робит-->
     <target name="test" depends="build">
         <mkdir dir="${test.classes.dir}"/>
         <mkdir dir="${test.reports.dir}/raw"/>
