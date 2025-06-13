@@ -7,18 +7,24 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>labs.model.Point</class>
         <properties>
-            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:h2:mem:studs;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value="sa"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
-            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/studs"/>
+<!--            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>-->
+<!--            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>-->
+<!--            <property name="hibernate.show_sql" value="true"/>-->
+<!--            <property name="hibernate.format_sql" value="true"/>-->
 
-<!--            потом уберу-->
-            <property name="hibernate.connection.password" value=""/>
-            <property name="hibernate.connection.username" value=""/>
+<!--            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/studs"/>-->
 
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgresPlusDialect"/>
+<!--            <property name="hibernate.connection.password" value="7Tpx3iO5o2XLp7ja"/>-->
+<!--            <property name="hibernate.connection.username" value="s409577"/>-->
+
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgresPlusDialect"/>-->
             <property name="show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="connection.pool_size" value="20"/>

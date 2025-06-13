@@ -6,7 +6,7 @@ import jakarta.inject.Named;
 
 import java.io.Serializable;
 
-@Named("pointCounter")
+@Named("hitPercentageCounter")
 @SessionScoped
 public class HitPercentageCounter implements HitPercentageCounterMBean, Serializable {
     @Inject
