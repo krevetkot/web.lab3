@@ -6,30 +6,30 @@ import javax.management.*;
 import java.lang.management.ManagementFactory;
 
 public class MBeanRegister {
-    private static ObjectName pointsCounterName;
-    private static ObjectName hitPercentageCounterName;
+    private static final ObjectName pointsCounterName;
+    private static final ObjectName hitPercentageCounterName;
+    private static final MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
 
     static {
         try {
-            pointsCounterName = new ObjectName("labs.mbeans:type=PointCounter");
+            pointsCounterName = new ObjectName("labs.mbeans:type=pointCounter");
             hitPercentageCounterName = new ObjectName("labs.mbeans:type=hitPercentageCounter");
         } catch (MalformedObjectNameException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void registerMBeans() {
+    public static void registerPointCounterMBean(Object bean) {
         try {
-            MBeanServer mbeanServer = ManagementFactory.getPlatformMBeanServer();
+            mbeanServer.registerMBean(bean, pointsCounterName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Регистрация PointsCounter
-            PointCounterMBean pointsCounter = new PointCounter();
-            mbeanServer.registerMBean(pointsCounter, pointsCounterName);
-
-            // Регистрация HitPercentageCounter
-            HitPercentageCounterMBean hitPercentage = new HitPercentageCounter();
-            mbeanServer.registerMBean(hitPercentage, hitPercentageCounterName);
-
+    public static void registerHitPercentageCounterMBean(Object bean) {
+        try {
+            mbeanServer.registerMBean(bean, hitPercentageCounterName);
         } catch (Exception e) {
             e.printStackTrace();
         }

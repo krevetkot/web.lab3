@@ -1,7 +1,9 @@
 package labs.mbeans;
 
 import jakarta.enterprise.context.*;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Named;
+import labs.util.MBeanRegister;
 
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
@@ -13,6 +15,10 @@ public class PointCounter extends NotificationBroadcasterSupport implements Poin
     private int totalScore;
     private int missedScore;
     private long msgNumber = 1;
+
+    public void init(@Observes @Initialized(SessionScoped.class) Object unused) {
+        MBeanRegister.registerPointCounterMBean(this);
+    }
 
     @Override
     public int getTotalPoints() {

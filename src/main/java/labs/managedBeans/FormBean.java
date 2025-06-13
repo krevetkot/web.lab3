@@ -7,6 +7,7 @@ import jakarta.inject.Named;
 import labs.database.DatabaseManager;
 import labs.mbeans.HitPercentageCounter;
 import labs.mbeans.PointCounter;
+import labs.mbeans.PointCounterMBean;
 import labs.model.Point;
 import labs.util.MBeanRegister;
 import labs.util.Validator;
@@ -48,7 +49,6 @@ public class FormBean implements Serializable {
         r = 2;
         dbManager = DatabaseManager.getInstance();
         validator = new Validator();
-        MBeanRegister.registerMBeans();
         logger.info("mbeans are registered");
         logger.info("formBean.init() successfully finished");
     }
