@@ -12,7 +12,6 @@ public class HitPercentageCounter implements HitPercentageCounterMBean, Serializ
     @Inject
     private PointCounter pointCounter;
 
-
     @Override
     public double getProportion() {
         return (double) pointCounter.getMissedPoints() / pointCounter.getTotalPoints();

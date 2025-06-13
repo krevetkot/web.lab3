@@ -58,6 +58,7 @@ public class FormBean implements Serializable {
         boolean isHit = validator.isHit(x, y, r);
         dbManager.insertPoint(new Point(x, y, r, isHit));
         tableResBean.updateResultList();
+        pointCounter.incrementPoints(isHit);
         logger.info("formBean.addPoint() successfully finished");
     }
 }

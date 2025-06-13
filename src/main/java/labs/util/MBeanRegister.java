@@ -27,29 +27,13 @@ public class MBeanRegister {
             mbeanServer.registerMBean(pointsCounter, pointsCounterName);
 
             // Регистрация HitPercentageCounter
-            HitPercentageCounterMBean hitPercentage = new HitPercentageCounterMBean(pointsCounter);
+            HitPercentageCounterMBean hitPercentage = new HitPercentageCounter();
             mbeanServer.registerMBean(hitPercentage, hitPercentageCounterName);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-//    public static void unregisterPointCounter() {
-//        try {
-//            ManagementFactory.getPlatformMBeanServer().unregisterMBean(pointsCounterName);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static void unregisterHitPercentageCounter() {
-//        try {
-//            ManagementFactory.getPlatformMBeanServer().unregisterMBean(hitPercentageCounterName);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public static ObjectName getPointCounterInstance() {
         return pointsCounterName;
