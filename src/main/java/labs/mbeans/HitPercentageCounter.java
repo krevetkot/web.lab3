@@ -1,5 +1,6 @@
 package labs.mbeans;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.event.Observes;
@@ -10,17 +11,20 @@ import labs.util.MBeanRegister;
 import java.io.Serializable;
 
 @Named("hitPercentageCounter")
-@SessionScoped
+@ApplicationScoped
 public class HitPercentageCounter implements HitPercentageCounterMBean, Serializable {
     @Inject
     private PointCounter pointCounter;
 
-    public void init(@Observes @Initialized(SessionScoped.class) Object unused) {
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object unused) {
         MBeanRegister.registerHitPercentageCounterMBean(this);
     }
 
     @Override
     public double getProportion() {
+        if (pointCounter.getTotalPoints() == 0){
+            return 0;
+        }
         return (double) pointCounter.getMissedPoints() / pointCounter.getTotalPoints();
     }
 }

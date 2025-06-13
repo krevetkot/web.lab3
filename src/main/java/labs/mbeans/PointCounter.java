@@ -2,6 +2,7 @@ package labs.mbeans;
 
 import jakarta.enterprise.context.*;
 import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import labs.util.MBeanRegister;
 
@@ -10,13 +11,16 @@ import javax.management.NotificationBroadcasterSupport;
 import java.io.Serializable;
 
 @Named("pointCounter")
-@SessionScoped
+@ApplicationScoped
 public class PointCounter extends NotificationBroadcasterSupport implements PointCounterMBean, Serializable {
     private int totalScore;
     private int missedScore;
     private long msgNumber = 1;
 
-    public void init(@Observes @Initialized(SessionScoped.class) Object unused) {
+    @Inject
+    private HitPercentageCounterMBean hitPercentageCounterMBean;
+
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object unused) {
         MBeanRegister.registerPointCounterMBean(this);
     }
 
