@@ -5,7 +5,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import labs.database.DatabaseManager;
+import labs.mbeans.HitPercentageCounter;
+import labs.mbeans.PointCounter;
 import labs.model.Point;
+import labs.util.MBeanRegister;
 import labs.util.Validator;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +35,10 @@ public class FormBean implements Serializable {
     private Validator validator;
     @Inject
     private TableResBean tableResBean;
+    @Inject
+    private PointCounter pointCounter;
+    @Inject
+    private HitPercentageCounter hitPercentageCounter;
 
     @PostConstruct
     public void init(){
@@ -41,6 +48,8 @@ public class FormBean implements Serializable {
         r = 2;
         dbManager = DatabaseManager.getInstance();
         validator = new Validator();
+        MBeanRegister.registerMBeans();
+        logger.info("mbeans are registered");
         logger.info("formBean.init() successfully finished");
     }
 
